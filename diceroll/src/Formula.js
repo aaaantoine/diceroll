@@ -139,8 +139,24 @@ function performOperations(symbols, ops)
     return newSymbols;
 }
 
+function validate(expression) {
+    function count(symbol) {
+        const pattern = new RegExp('\\'+symbol, "g");
+        return (expression.match(pattern) || []).length;
+    }
+    const regex = /^\(*\d+(\)*[d+\-*/]\(*\d+)+\)*$/;
+    const isMatch = !!expression.match(regex);
+    const countLeft = count('(');
+    const countRight = count(')');
+    return isMatch && countLeft === countRight;
+}
+
 function calculate(expression)
 {
+    if (!validate(expression)) {
+        throw new Error("Formula is invalid.");
+    }
+
     let symbols = parseSymbols(expression);
     
     // order of operations is P-R-MD-AS

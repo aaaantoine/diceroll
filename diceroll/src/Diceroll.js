@@ -6,11 +6,19 @@ export default class Diceroll extends React.Component {
         super(props);
         this.state = {
             formula: null,
+            formulaIsInvalid: false,
             result: null
         };
     }
 
     render() {
+        const error = this.state.formulaIsInvalid
+            ? (
+                <div class="alert alert-danger" role="alert">
+                    The formula is invalid.
+                </div>
+            )
+            : "";
         return (
             <div class="container">
                 <div class="form-group">
@@ -25,6 +33,7 @@ export default class Diceroll extends React.Component {
                         </div>
                     </div>
                 </div>
+                {error}
                 <div class="row">
                     <div class="col-md-9">
 
@@ -44,6 +53,10 @@ function handleFormulaKeyUp(event, component) {
     }
 }
 function handleRollClick(component) {
-    const result = Formula.calculate(component.state.formula);
-    component.setState({result});
+    try {
+        const result = Formula.calculate(component.state.formula);
+        component.setState({result, formulaIsInvalid: false});
+    } catch {
+        component.setState({formulaIsInvalid: true});
+    }
 }
