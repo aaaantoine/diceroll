@@ -7,7 +7,7 @@ export default class Diceroll extends React.Component {
         this.state = {
             formula: null,
             formulaIsInvalid: false,
-            result: null
+            results: []
         };
     }
 
@@ -25,38 +25,57 @@ export default class Diceroll extends React.Component {
                     <label for="rollFormula">Formula</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="rollFormula"
-                            onKeyUp={(e) => handleFormulaKeyUp(e, this)}
+                            onKeyUp={(e) => this.handleFormulaKeyUp(e, this)}
                             onChange={(e) => this.setState({formula: e.target.value})} />
                         <div class="input-group-append">
                         <button class="btn btn-primary" type="submit"
-                            onClick={() => handleRollClick(this)}>Roll</button>
+                            onClick={() => this.handleRollClick(this)}>Roll</button>
                         </div>
                     </div>
                 </div>
                 {error}
-                <div class="row">
-                    <div class="col-md-9">
-
-                    </div>
-                    <div class="col-md-3">
-                        <span class="result">{this.state.result === 0 ? '0' : this.state.result || ''}</span>
-                    </div>
-                </div>
+                {this.renderHistory()}
+                
             </div>
         );
     }
-}
 
-function handleFormulaKeyUp(event, component) {
-    if (event.keyCode === 13) {
-        handleRollClick(component);
+    renderHistory() {
+        return this.state.results
+        .map(result => (
+            <div class="row">
+                <div class="col-md-9">
+
+                </div>
+                <div class="col-md-3">
+                    <span class="result">{result}</span>
+                </div>
+            </div>
+        ))
+        .reverse();
     }
-}
-function handleRollClick(component) {
-    try {
-        const result = Formula.calculate(component.state.formula);
-        component.setState({result, formulaIsInvalid: false});
-    } catch {
-        component.setState({formulaIsInvalid: true});
+
+    handleFormulaKeyUp(event) {
+        if (event.keyCode === 13) {
+            this.handleRollClick();
+        }
+    }
+
+    handleRollClick() {
+        try {
+            const result = Formula.calculate(this.state.formula);
+            this.addResult(result);
+        } catch {
+            this.setState({formulaIsInvalid: true});
+        }
+    }
+
+    addResult(result) {
+        let results = this.state.results;
+        results.push(result);
+        this.setState({
+            results: results,
+            formulaIsInvalid: false
+        });
     }
 }
