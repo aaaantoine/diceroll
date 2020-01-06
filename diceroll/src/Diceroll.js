@@ -4,6 +4,7 @@ import Formula from './Formula.js';
 export default class Diceroll extends React.Component {
     constructor(props) {
         super(props);
+        this.maxResults = 5;
         this.state = {
             formula: null,
             formulaIsInvalid: false,
@@ -34,25 +35,31 @@ export default class Diceroll extends React.Component {
                     </div>
                 </div>
                 {error}
-                {this.renderHistory()}
-                
+                <div>
+                    {this.renderHistory()}
+                </div>
             </div>
         );
     }
 
     renderHistory() {
+        const latestIndex = this.state.results.length - 1;
         return this.state.results
-        .map(result => (
-            <div class="row">
-                <div class="col-md-9">
+            .map(function(result, index) {
+                const isLatest = index === latestIndex;
+                const resultClass = "result" + (isLatest ? " latest" : "");
+                return (
+                    <div class="row">
+                        <div class="col-md-9">
 
-                </div>
-                <div class="col-md-3">
-                    <span class="result">{result}</span>
-                </div>
-            </div>
-        ))
-        .reverse();
+                        </div>
+                        <div class="col-md-3">
+                            <span class={resultClass}>{result}</span>
+                        </div>
+                    </div>
+                );
+            })
+            .reverse();
     }
 
     handleFormulaKeyUp(event) {
@@ -73,6 +80,9 @@ export default class Diceroll extends React.Component {
     addResult(result) {
         let results = this.state.results;
         results.push(result);
+        if (results.length > this.maxResults) {
+            results.splice(0, 1);
+        }
         this.setState({
             results: results,
             formulaIsInvalid: false

@@ -1,4 +1,8 @@
 .result {
+  font-size: 4em;
+}
+
+.result.latest {
   font-size: 8em;
   font-weight: bold;
 }
