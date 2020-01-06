@@ -71,6 +71,13 @@ function parseSymbols(expression) {
             symbols.push(new Symbol(COMPOUND, ''));
         }
     }
+
+    // convert COMPOUND symbols to sub-arrays.
+    for (let i = 0; i < symbols.length; i++) {
+        if (symbols[i].type === COMPOUND) {
+            symbols[i] = parseSymbols(symbols[i].text);
+        }
+    }
     
     return symbols;
 }
@@ -151,26 +158,20 @@ function validate(expression) {
     return isMatch && countLeft === countRight;
 }
 
-function calculate(expression)
-{
-    if (!validate(expression)) {
-        throw new Error("Formula is invalid.");
-    }
-
-    let symbols = parseSymbols(expression);
-    
+function subCalculate(symbols) {
     // order of operations is P-R-MD-AS
     // where R = roll dice
-    
+
     // find parentheses first
     for (let i = 0; i < symbols.length; i++) {
-        if (symbols[i].type === COMPOUND)
+
+        if (Array.isArray(symbols[i]))
         {
             // convert COMPOUND to NUMBER via recursion
-            symbols[i] = NumberSymbol(calculate(symbols[i].text));
+            symbols[i] = NumberSymbol(subCalculate(symbols[i]));
         }
     }
-    
+
     // roll dice
     symbols = performOperations(symbols, [ROLL]);
     
@@ -191,6 +192,16 @@ function calculate(expression)
     {
         return 0;
     }
+}
+
+function calculate(expression)
+{
+    if (!validate(expression)) {
+        throw new Error("Formula is invalid.");
+    }
+
+    let symbols = parseSymbols(expression);    
+    return subCalculate(symbols);
 }
 
 export default {
