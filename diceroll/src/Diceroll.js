@@ -89,15 +89,20 @@ export default class Diceroll extends React.Component {
         }
         const leftParen = renderSymbol({text: "("});
         const rightParen = renderSymbol({text: ")"});
-        return symbols.map(symbol =>
-            Array.isArray(symbol)
-                ? <span>
+        return symbols.map(symbol => {
+            if (Array.isArray(symbol)) {
+                return <span>
                     {symbol.length > 1 ? leftParen : ""}
                     {th.renderSymbols(symbol)}
                     {symbol.length > 1 ? rightParen : ""}
-                </span>
-                : renderSymbol(symbol)
-        );
+                </span>;
+            }
+            // Skip plus operator from dice array. 
+            if (symbols.some(x => x.sides) && symbol.text === "+") {
+                return "";
+            }
+            return renderSymbol(symbol);
+        });
     }
 
     handleFormulaKeyUp(event) {
