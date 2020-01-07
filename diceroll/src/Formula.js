@@ -8,7 +8,6 @@ const ROLL = 'd';
 const NUMBER = 0;
 const OPERATOR = 1;
 const COMPOUND = 2;
-const DIE = 3;
 
 class Symbol {
     constructor(type, text) {
