@@ -44,6 +44,7 @@ export default class Diceroll extends React.Component {
 
     renderHistory() {
         const latestIndex = this.state.results.length - 1;
+        const th = this;
         return this.state.results
             .map(function(result, index) {
                 const isLatest = index === latestIndex;
@@ -51,15 +52,33 @@ export default class Diceroll extends React.Component {
                 return (
                     <div class="row">
                         <div class="col-md-9">
-
+                            {th.renderSymbols(result.symbols)}
                         </div>
                         <div class="col-md-3">
-                            <span class={resultClass}>{result}</span>
+                            <span class={resultClass}>{result.total}</span>
                         </div>
                     </div>
                 );
             })
             .reverse();
+    }
+
+    renderSymbols(symbols) {
+        const th = this;
+        function renderSymbol(symbol) {
+            return <span class="symbol">{symbol.text}</span>;
+        }
+        const leftParen = renderSymbol({text: "("});
+        const rightParen = renderSymbol({text: ")"});
+        return symbols.map(symbol =>
+            Array.isArray(symbol)
+                ? <span>
+                    {leftParen}
+                    {th.renderSymbols(symbol)}
+                    {rightParen}
+                </span>
+                : renderSymbol(symbol)
+        );
     }
 
     handleFormulaKeyUp(event) {

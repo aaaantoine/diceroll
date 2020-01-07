@@ -8,6 +8,7 @@ const ROLL = 'd';
 const NUMBER = 0;
 const OPERATOR = 1;
 const COMPOUND = 2;
+const DIE = 3;
 
 class Symbol {
     constructor(type, text) {
@@ -17,6 +18,13 @@ class Symbol {
 
     getNumber() {
          return this.type !== NUMBER ? 0 : parseFloat(this.text);
+    }
+}
+
+class DieSymbol extends Symbol {
+    constructor(sides, value) {
+        super(NUMBER, value.toString());
+        this.sides = sides;
     }
 }
 
@@ -82,12 +90,12 @@ function parseSymbols(expression) {
     return symbols;
 }
 
+function rollOne(sides) {
+    return Math.floor(Math.random() * (sides)) + 1;
+}
+
 function roll(count, sides)
 {
-    function rollOne(sides) {
-        return Math.floor(Math.random() * (sides)) + 1;
-    }
-    
     let sum = 0;
     for (let i = 0; i < count; i++)
     {
@@ -95,24 +103,41 @@ function roll(count, sides)
     }
     return sum;
 }
+
+function rollIntoSymbols(count, sides) {
+    let symbols = [];
+    for (let i = 0; i < count; i++) {
+        if (symbols.length > 0) {
+            symbols.push(new Symbol(OPERATOR, PLUS));
+        }
+        symbols.push(new DieSymbol(sides, rollOne(sides)));
+    }
+    return symbols;
+}
     
 function operation(number1, symbol, number2)
 {
-    switch (symbol)
-    {
-        case PLUS:
-            return number1 + number2;
-        case MINUS:
-            return number1 - number2;
-        case TIMES:
-            return number1 * number2;
-        case DIV:
-            return number1 / number2;
-        case ROLL:
-            return roll(number1, number2);
-        default:
-            return number1;
+    if (symbol === ROLL) {
+        return rollIntoSymbols(number1, number2);
     }
+
+    return NumberSymbol((function () {
+        switch (symbol)
+        {
+            case PLUS:
+                return number1 + number2;
+            case MINUS:
+                return number1 - number2;
+            case TIMES:
+                return number1 * number2;
+            case DIV:
+                return number1 / number2;
+            case ROLL:
+                return roll(number1, number2);
+            default:
+                return number1;
+        }
+    })());
 }
 
 function performOperations(symbols, ops)
@@ -124,17 +149,16 @@ function performOperations(symbols, ops)
         // if the current symbol is an operator
         // and is one of the current operations declared by ops,
         // perform that operation now.
-        if (symbol.type === OPERATOR && ops.includes(symbol.text))
+        if (symbol.type && symbol.type === OPERATOR && ops.includes(symbol.text))
         {
             // effectively convert NUMBER OPERATOR NUMBER to NUMBER
             
             // assumes that i is not first or last in the array
             // and that before and after are both numbers.
-            let newSymbol = NumberSymbol(
-                operation(
-                    symbols[i-1].getNumber(),
-                    symbol.text[0],
-                    symbols[i+1].getNumber()));
+            const number1 = newSymbols[newSymbols.length-1].getNumber();
+            const operator = symbol.text[0];
+            const number2 = symbols[i+1].getNumber();
+            let newSymbol = operation(number1, operator, number2);
             newSymbols.pop();
             newSymbols.push(newSymbol);
             i++;
@@ -163,35 +187,46 @@ function subCalculate(symbols) {
     // where R = roll dice
 
     // find parentheses first
-    for (let i = 0; i < symbols.length; i++) {
+    let newSymbols = symbols.slice();
+    for (let i = 0; i < newSymbols.length; i++) {
 
-        if (Array.isArray(symbols[i]))
+        if (Array.isArray(newSymbols[i]))
         {
             // convert COMPOUND to NUMBER via recursion
-            symbols[i] = NumberSymbol(subCalculate(symbols[i]));
+            newSymbols[i] = NumberSymbol(subCalculate(newSymbols[i]));
         }
     }
 
     // roll dice
-    symbols = performOperations(symbols, [ROLL]);
+    newSymbols = performOperations(newSymbols, [ROLL]);
     
     // multiplication and division
-    symbols = performOperations(symbols, [TIMES, DIV]);
+    newSymbols = performOperations(newSymbols, [TIMES, DIV]);
     
     // addition and subtraction
-    symbols = performOperations(symbols, [PLUS, MINUS]);
+    newSymbols = performOperations(newSymbols, [PLUS, MINUS]);
     
     // by this point there should only be one NUMBER left.
     // TODO: confirm above via validation code
     
-    if (symbols.length >= 1)
+    if (newSymbols.length >= 1)
     {
-        return symbols[0].getNumber();
+        return newSymbols[0].getNumber();
     }
     else
     {
         return 0;
     }
+}
+
+function rollAll(symbols) {
+    // roll dice in sub-expressions
+    symbols = symbols.map(
+        symbol => Array.isArray(symbol) ? rollAll(symbol) : symbol);
+
+    // roll dice
+    symbols = performOperations(symbols, [ROLL]);
+    return symbols;
 }
 
 function calculate(expression)
@@ -200,8 +235,12 @@ function calculate(expression)
         throw new Error("Formula is invalid.");
     }
 
-    let symbols = parseSymbols(expression);    
-    return subCalculate(symbols);
+    let symbols = parseSymbols(expression);
+    symbols = rollAll(symbols);
+    return {
+        symbols,
+        total: subCalculate(symbols)
+    };
 }
 
 export default {
