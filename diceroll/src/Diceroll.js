@@ -92,9 +92,9 @@ export default class Diceroll extends React.Component {
         return symbols.map(symbol =>
             Array.isArray(symbol)
                 ? <span>
-                    {leftParen}
+                    {symbol.length > 1 ? leftParen : ""}
                     {th.renderSymbols(symbol)}
-                    {rightParen}
+                    {symbol.length > 1 ? rightParen : ""}
                 </span>
                 : renderSymbol(symbol)
         );
