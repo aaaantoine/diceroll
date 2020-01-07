@@ -65,8 +65,27 @@ export default class Diceroll extends React.Component {
 
     renderSymbols(symbols) {
         const th = this;
+        function getSymbolClass(sides, value) {
+            function classBySides(sides) {
+                switch(sides) {
+                    case 2: return "coin";
+                    case 4: return "d4";
+                    case 6: return "d6";
+                    case 8: return "d8";
+                    default:
+                        return null;
+                }
+            }
+            const prefix = classBySides(sides);
+            return prefix
+                ? `${prefix} ${prefix}-${value}`
+                : "coin";
+        }
         function renderSymbol(symbol) {
-            return <span class="symbol">{symbol.text}</span>;
+            const symbolClass = "symbol" + (symbol.sides
+                ? " die " + getSymbolClass(symbol.sides, symbol.text)
+                : "");
+            return <span class={symbolClass}>{symbol.text}</span>;
         }
         const leftParen = renderSymbol({text: "("});
         const rightParen = renderSymbol({text: ")"});
