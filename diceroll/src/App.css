@@ -9,13 +9,13 @@
 
 .symbol {
   font-size: 2em;
-  line-height: 2em;
+  line-height: 64px;
 }
 
 .symbol.die {
   display: inline-block;
-  width: 2em;
-  height: 2em;
+  width: 64px;
+  height: 64px;
   text-align: center;
   background-repeat: no-repeat;
   background-size: 100%;
@@ -27,7 +27,8 @@
   color: rgba(0, 0, 0, 0)
 }
 
-.symbol.d8 { color: white; }
+.symbol.d8,
+.symbol.d10 { color: white; }
 
 .symbol.coin-1 { background-image: url("image/coin_1.svg"); }
 .symbol.coin-2 { background-image: url("image/coin_2.svg"); }
@@ -45,3 +46,7 @@
 .symbol.d6-6 { background-image: url("image/d6_6.svg"); }
 
 .symbol.d8 { background-image: url("image/d8.svg"); }
+.symbol.d10 {
+   background-image: url("image/d10.svg");
+   font-size: 1.30em;
+}

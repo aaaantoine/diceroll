@@ -72,6 +72,7 @@ export default class Diceroll extends React.Component {
                     case 4: return "d4";
                     case 6: return "d6";
                     case 8: return "d8";
+                    case 10: return "d10";
                     default:
                         return null;
                 }
