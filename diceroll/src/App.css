@@ -56,3 +56,27 @@
 .symbol.d10 { background-image: url("image/d10.svg"); }
 .symbol.d12 { background-image: url("image/d12.svg"); }
 .symbol.d20 { background-image: url("image/d20.svg"); }
+
+.history .row {
+  border-bottom: 1px solid #888888;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.history .row.latest .symbol {
+  font-size: 3em;
+  line-height: 96px;
+}
+
+.history .row.latest .symbol.die {
+  font-size: 3em;
+  line-height: 96px;
+  width: 96px;
+  height: 96px;
+}
+
+.history .row.latest .symbol.d10,
+.history .row.latest .symbol.d12,
+.history .row.latest .symbol.d20 { font-size: 1.95em; }

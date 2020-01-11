@@ -35,7 +35,7 @@ export default class Diceroll extends React.Component {
                     </div>
                 </div>
                 {error}
-                <div>
+                <div class="history">
                     {this.renderHistory()}
                 </div>
             </div>
@@ -47,10 +47,11 @@ export default class Diceroll extends React.Component {
         const th = this;
         return this.state.results
             .map(function(result, index) {
-                const isLatest = index === latestIndex;
-                const resultClass = "result" + (isLatest ? " latest" : "");
+                const latestClass = index === latestIndex ? " latest" : "";
+                const rowClass = "row" + latestClass;
+                const resultClass = "result" + latestClass;
                 return (
-                    <div class="row">
+                    <div class={rowClass}>
                         <div class="col-md-9">
                             {th.renderSymbols(result.symbols)}
                         </div>
