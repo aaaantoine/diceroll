@@ -28,7 +28,12 @@
 }
 
 .symbol.d8,
-.symbol.d10 { color: white; }
+.symbol.d10,
+.symbol.d12 { color: white; }
+
+/* Larger numbers mean more, smaller sides, need smaller digits */
+.symbol.d10,
+.symbol.d12 { font-size: 1.30em; }
 
 .symbol.coin-1 { background-image: url("image/coin_1.svg"); }
 .symbol.coin-2 { background-image: url("image/coin_2.svg"); }
@@ -46,7 +51,5 @@
 .symbol.d6-6 { background-image: url("image/d6_6.svg"); }
 
 .symbol.d8 { background-image: url("image/d8.svg"); }
-.symbol.d10 {
-   background-image: url("image/d10.svg");
-   font-size: 1.30em;
-}
+.symbol.d10 { background-image: url("image/d10.svg"); }
+.symbol.d12 { background-image: url("image/d12.svg"); }
