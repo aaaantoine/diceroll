@@ -8,7 +8,8 @@ export default class Diceroll extends React.Component {
         this.state = {
             formula: null,
             formulaIsInvalid: false,
-            results: []
+            results: [],
+            showHelp: false
         };
     }
 
@@ -20,21 +21,77 @@ export default class Diceroll extends React.Component {
                 </div>
             )
             : "";
+        const helpSection = this.state.showHelp
+            ? (
+                <div class="alert alert-info help">
+                    <h2>Help</h2>
+                    <p>
+                        <em>Click the <strong>Help</strong> button again to dismiss this info box.</em>
+                    </p>
+                    <p>
+                        Any positive integer number can be entered as part of the formula.
+                        Numbers are joined together by operators.
+                        Operators include:
+                    </p>
+                    <ul>
+                        <li>
+                            <code>d</code>:
+                            Roll dice.
+                            First number is the quantity of dice.
+                            Second number is the number of sides per die.
+                        </li>
+                        <li>
+                            <code>*</code>: Multiply the two numbers.
+                        </li>
+                        <li>
+                            <code>/</code>: Divide the first number by the second number.
+                        </li>
+                        <li>
+                            <code>+</code>: Add the two numbers.
+                        </li>
+                        <li>
+                            <code>-</code>: Subtract the second number from the first number.
+                        </li>
+                    </ul>
+                    <p>
+                        Calculation honors traditional order of operations.
+                        Calculates dice rolls first,
+                        then expressions in parentheses,
+                        then multiplication and division,
+                        then addition and subtraction.
+                    </p>
+                    <p>
+                        Examples:
+                        <ul>
+                            <li><code>2d6</code>: Rolls 2 6-sided dice.</li>
+                            <li><code>1d20+5</code>: Rolls a 20-sided die and adds 5.</li>
+                            <li><code>(4d8+2)/3</code>: Rolls 4 8-sided dice and adds 2, then divides by 3.</li>
+                        </ul>
+                    </p>
+                </div>
+
+            )
+            : "";
+        const helpButtonClass = "btn btn-outline-secondary" +
+            (this.state.showHelp ? " active" : "");
         return (
             <div class="container">
                 <div class="form-group">
                     <label for="rollFormula">Formula</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="rollFormula"
-                            onKeyUp={(e) => this.handleFormulaKeyUp(e, this)}
+                            onKeyUp={(e) => this.handleFormulaKeyUp(e)}
                             onChange={(e) => this.setState({formula: e.target.value})} />
                         <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit"
-                            onClick={() => this.handleRollClick(this)}>Roll</button>
+                            <button class={helpButtonClass} type="button"
+                                onClick={() => this.handleHelpClick()}>Help</button>
+                            <button class="btn btn-primary" type="submit"
+                                onClick={() => this.handleRollClick()}>Roll</button>
                         </div>
                     </div>
                 </div>
                 {error}
+                {helpSection}
                 <div class="history">
                     {this.renderHistory()}
                 </div>
@@ -115,6 +172,9 @@ export default class Diceroll extends React.Component {
         }
     }
 
+    handleHelpClick() {
+        this.setState({showHelp: !this.state.showHelp});
+    }
     handleRollClick() {
         try {
             const result = Formula.calculate(this.state.formula);
