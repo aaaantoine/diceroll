@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href=".">
-          <img src="/image/icon.svg" width="30" height="30" class="d-inline-block align-top" alt="" />
+          <img src="image/icon.svg" width="30" height="30" class="d-inline-block align-top" alt="" />
           Diceroll
         </a>
       </nav>
