@@ -4,7 +4,7 @@ import Formula from './Formula.js';
 export default class Diceroll extends React.Component {
     constructor(props) {
         super(props);
-        this.maxResults = 5;
+        this.maxResults = 50;
         this.state = {
             formula: null,
             formulaIsInvalid: false,
