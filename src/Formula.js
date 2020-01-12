@@ -89,25 +89,26 @@ function parseSymbols(expression) {
     return symbols;
 }
 
-function rollOne(sides) {
-    return Math.floor(Math.random() * (sides)) + 1;
+function rollOne(sides, randomizer) {
+    const r = randomizer || Math.random;
+    return Math.floor(r() * (sides)) + 1;
 }
 
-function rollIntoSymbols(count, sides) {
+function rollIntoSymbols(count, sides, randomizer) {
     let symbols = [];
     for (let i = 0; i < count; i++) {
         if (symbols.length > 0) {
             symbols.push(new Symbol(OPERATOR, PLUS));
         }
-        symbols.push(new DieSymbol(sides, rollOne(sides)));
+        symbols.push(new DieSymbol(sides, rollOne(sides, randomizer)));
     }
     return symbols;
 }
     
-function operation(number1, symbol, number2)
+function operation(number1, symbol, number2, randomizer)
 {
     if (symbol === ROLL) {
-        return rollIntoSymbols(number1, number2);
+        return rollIntoSymbols(number1, number2, randomizer);
     }
 
     return NumberSymbol((function () {
@@ -127,7 +128,7 @@ function operation(number1, symbol, number2)
     })());
 }
 
-function performOperations(symbols, ops)
+function performOperations(symbols, ops, randomizer)
 {
     let newSymbols = [];
     for (let i = 0; i < symbols.length; i++)
@@ -145,7 +146,7 @@ function performOperations(symbols, ops)
             const number1 = newSymbols[newSymbols.length-1].getNumber();
             const operator = symbol.text[0];
             const number2 = symbols[i+1].getNumber();
-            let newSymbol = operation(number1, operator, number2);
+            let newSymbol = operation(number1, operator, number2, randomizer);
             newSymbols.pop();
             newSymbols.push(newSymbol);
             i++;
@@ -170,8 +171,9 @@ function validate(expression) {
 }
 
 function subCalculate(symbols) {
-    // order of operations is P-R-MD-AS
+    // order of operations is R-P-MD-AS
     // where R = roll dice
+    // Dice should already be rolled and processed into symbols.
 
     // find parentheses first
     let newSymbols = symbols.slice();
@@ -183,9 +185,6 @@ function subCalculate(symbols) {
             newSymbols[i] = NumberSymbol(subCalculate(newSymbols[i]));
         }
     }
-
-    // roll dice
-    newSymbols = performOperations(newSymbols, [ROLL]);
     
     // multiplication and division
     newSymbols = performOperations(newSymbols, [TIMES, DIV]);
@@ -206,17 +205,27 @@ function subCalculate(symbols) {
     }
 }
 
-function rollAll(symbols) {
+function rollAll(symbols, randomizer) {
     // roll dice in sub-expressions
     symbols = symbols.map(
-        symbol => Array.isArray(symbol) ? rollAll(symbol) : symbol);
+        symbol => Array.isArray(symbol) ? rollAll(symbol, randomizer) : symbol);
 
     // roll dice
-    symbols = performOperations(symbols, [ROLL]);
+    symbols = performOperations(symbols, [ROLL], randomizer);
     return symbols;
 }
 
-function calculate(expression)
+/**
+ * Calculates the given formula expression.
+ * 
+ * @param {string} expression
+ *      The expression to parse and calculate.
+ * @param {function} randomizer
+ *      An optional function to produce a number
+ *      between 0 (inclusive) and 1 (exclusive).
+ *      Default is `Math.random`.
+ */
+function calculate(expression, randomizer)
 {
     const lowerExpression = expression.toLowerCase();
     if (!validate(lowerExpression)) {
@@ -224,7 +233,7 @@ function calculate(expression)
     }
 
     let symbols = parseSymbols(lowerExpression);
-    symbols = rollAll(symbols);
+    symbols = rollAll(symbols, randomizer);
     return {
         symbols,
         total: subCalculate(symbols)
