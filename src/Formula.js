@@ -230,11 +230,12 @@ function rollAll(symbols) {
 
 function calculate(expression)
 {
-    if (!validate(expression)) {
+    const lowerExpression = expression.toLowerCase();
+    if (!validate(lowerExpression)) {
         throw new Error("Formula is invalid.");
     }
 
-    let symbols = parseSymbols(expression);
+    let symbols = parseSymbols(lowerExpression);
     symbols = rollAll(symbols);
     return {
         symbols,
