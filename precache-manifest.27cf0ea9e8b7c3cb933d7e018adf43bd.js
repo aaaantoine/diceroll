@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e94aa86cc6e44ca3619fbcff49111fba",
+    "revision": "40ee504eb9d22fca1c060d5ed0f94dcb",
     "url": "/diceroll/index.html"
   },
   {
-    "revision": "489b6f2f7671eebb9737",
-    "url": "/diceroll/static/css/main.f8929d0c.chunk.css"
+    "revision": "3d5567b96ef38c9df137",
+    "url": "/diceroll/static/css/main.be08fb86.chunk.css"
   },
   {
     "revision": "3b677adaf7ea4b962404",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/diceroll/static/js/2.b7a1a2f1.chunk.js.LICENSE"
   },
   {
-    "revision": "489b6f2f7671eebb9737",
-    "url": "/diceroll/static/js/main.4faedf1d.chunk.js"
+    "revision": "3d5567b96ef38c9df137",
+    "url": "/diceroll/static/js/main.3f472e4e.chunk.js"
   },
   {
     "revision": "b048d93ac89478760bd3",
