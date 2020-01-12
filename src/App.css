@@ -12,6 +12,8 @@
   line-height: 64px;
 }
 
+.symbol.discarded { opacity: 0.5; }
+
 .symbol.die {
   display: inline-block;
   width: 64px;

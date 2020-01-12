@@ -68,6 +68,13 @@ export default class Diceroll extends React.Component {
                             <li><code>(4d8+2)/3</code>: Rolls 4 8-sided dice and adds 2, then divides by 3.</li>
                         </ul>
                     </p>
+                    <p>
+                        Keep highest/lowest:
+                        <ul>
+                            <li><code>3h4d6</code>: Rolls 4 6-sided dice and only counts the 3 highest.</li>
+                            <li><code>1l2d20+3</code>: Rolls 2 20-sided dice, only counts the lowest, and adds 3.</li>
+                        </ul>
+                    </p>
                 </div>
 
             )
@@ -143,9 +150,11 @@ export default class Diceroll extends React.Component {
                 : "coin";
         }
         function renderSymbol(symbol) {
-            const symbolClass = "symbol" + (symbol.sides
+            const discarded = symbol.discard ? " discarded" : "";
+            const dieClass = symbol.sides
                 ? " die " + getSymbolClass(symbol.sides, symbol.text)
-                : "");
+                : ""
+            const symbolClass = "symbol" + discarded + dieClass;
             return <span class={symbolClass}>{symbol.text}</span>;
         }
         const leftParen = renderSymbol({text: "("});

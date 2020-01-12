@@ -3,6 +3,8 @@ const MINUS = '-';
 const TIMES = '*';
 const DIV = '/';
 const ROLL = 'd';
+const LOWEST = 'l';
+const HIGHEST = 'h';
 
 // symbol types
 const NUMBER = 0;
@@ -16,7 +18,9 @@ class Symbol {
     }
 
     getNumber() {
-         return this.type !== NUMBER ? 0 : parseFloat(this.text);
+        return this.type !== NUMBER || !!this.discard
+            ? 0 
+            : parseFloat(this.text);
     }
 }
 
@@ -24,6 +28,7 @@ class DieSymbol extends Symbol {
     constructor(sides, value) {
         super(NUMBER, value.toString());
         this.sides = sides;
+        this.discard = false;
     }
 }
 
@@ -61,7 +66,9 @@ function parseSymbols(expression) {
             expression[i] === MINUS ||
             expression[i] === TIMES ||
             expression[i] === DIV ||
-            expression[i] === ROLL) {
+            expression[i] === ROLL ||
+            expression[i] === LOWEST ||
+            expression[i] === HIGHEST) {
             symbols.push(new Symbol(OPERATOR, expression[i]));
         }
         else if (expression[i] >= '0' && expression[i] <= '9') {
@@ -104,11 +111,36 @@ function rollIntoSymbols(count, sides, randomizer) {
     }
     return symbols;
 }
+
+function markDiscarded(keepCount, keepLowestOrHighest, dice) {
+    function handleNoDice() {
+        throw new Error("Can only keep highest/lowest against a dice pool.");
+    }
+    if (!Array.isArray(dice)) {
+        handleNoDice();
+    }
+    let workdice = dice.filter(d => d.sides !== undefined);
+    if (workdice.length === 0) {
+        handleNoDice();
+    }
+    workdice.forEach(die => die.discard = false);
+    const compFunc = keepLowestOrHighest === LOWEST
+        ? (a, b) => a.getNumber() - b.getNumber()
+        : (a, b) => b.getNumber() - a.getNumber();
+    workdice
+        .sort(compFunc)
+        .slice(keepCount)
+        .forEach(die => die.discard = true);
     
-function operation(number1, symbol, number2, randomizer)
-{
+    return dice;
+}
+    
+function operation(number1, symbol, number2, randomizer) {
     if (symbol === ROLL) {
         return rollIntoSymbols(number1, number2, randomizer);
+    }
+    if ([LOWEST, HIGHEST].includes(symbol)) {
+        return markDiscarded(number1, symbol, number2);
     }
 
     return NumberSymbol((function () {
@@ -145,7 +177,8 @@ function performOperations(symbols, ops, randomizer)
             // and that before and after are both numbers.
             const number1 = newSymbols[newSymbols.length-1].getNumber();
             const operator = symbol.text[0];
-            const number2 = symbols[i+1].getNumber();
+            const next = symbols[i+1];
+            const number2 = Array.isArray(next) ? next : next.getNumber();
             let newSymbol = operation(number1, operator, number2, randomizer);
             newSymbols.pop();
             newSymbols.push(newSymbol);
@@ -163,7 +196,7 @@ function validate(expression) {
         const pattern = new RegExp('\\'+symbol, "g");
         return (expression.match(pattern) || []).length;
     }
-    const regex = /^\(*\d+(\)*[d+\-*/]\(*\d+)*\)*$/;
+    const regex = /^\(*\d+(\)*[dhl+\-*/]\(*\d+)*\)*$/;
     const isMatch = !!expression.match(regex);
     const countLeft = count('(');
     const countRight = count(')');
@@ -212,6 +245,7 @@ function rollAll(symbols, randomizer) {
 
     // roll dice
     symbols = performOperations(symbols, [ROLL], randomizer);
+    symbols = performOperations(symbols, [LOWEST, HIGHEST]);
     return symbols;
 }
 
