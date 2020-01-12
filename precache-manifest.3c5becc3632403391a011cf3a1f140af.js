@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "317e3ce7592f43cfebfb185127f8b48c",
+    "revision": "1f2f51f79a27052df837bf2faa1a1aea",
     "url": "/diceroll/index.html"
   },
   {
