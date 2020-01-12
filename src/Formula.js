@@ -93,16 +93,6 @@ function rollOne(sides) {
     return Math.floor(Math.random() * (sides)) + 1;
 }
 
-function roll(count, sides)
-{
-    let sum = 0;
-    for (let i = 0; i < count; i++)
-    {
-        sum += rollOne(sides);
-    }
-    return sum;
-}
-
 function rollIntoSymbols(count, sides) {
     let symbols = [];
     for (let i = 0; i < count; i++) {
@@ -131,8 +121,6 @@ function operation(number1, symbol, number2)
                 return number1 * number2;
             case DIV:
                 return number1 / number2;
-            case ROLL:
-                return roll(number1, number2);
             default:
                 return number1;
         }
