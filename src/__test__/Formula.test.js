@@ -34,6 +34,9 @@ test('throws exception when calculating 2+*2', () => {
 test('throws exception when calculating (2*(2+2)', () => {
     expect(() => Formula.calculate("(2*(2+2)")).toThrow(new Error('Parentheses mismatch. Counted 2 opening and 1 closing.'));
 });
+test('throws exception when calculating d', () => {
+    expect(() => Formula.calculate("d")).toThrow(new Error('Operator "d" at position 0 is missing a right-hand value.'));
+});
 
 // straight math
 test('calculates 1+1 and returns total of 2', () => testTotal("1+1", 2));

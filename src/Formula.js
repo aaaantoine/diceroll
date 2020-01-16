@@ -81,19 +81,19 @@ function parseSymbols(expression) {
             }
         }
         else if (isOperator(expression[i])) {
-            const LEFT = "left-hand";
-            const missingSide = i === 0 || !isValidBeforeOperator(expression[i-1])
-                ? LEFT
-                : i === expression.length - 1 || !isValidAfterOperator(expression[i+1])
-                    ? "right-hand"
-                    : null;
-            if (missingSide) {
-                if (missingSide === LEFT && [HIGHEST, LOWEST, ROLL].includes(expression[i])) {
+            function sideError(side) {
+                return new Error(`Operator "${expression[i]}" at position ${i} is missing a ${side} value.`);
+            }
+            if (i === 0 || !isValidBeforeOperator(expression[i-1])) {
+                if ([HIGHEST, LOWEST, ROLL].includes(expression[i])) {
                     // Assume e.g. d10 == 1d10 and h2d20 == 1h2d20
                     symbols.push(NumberSymbol(1));
                 } else {
-                    throw new Error(`Operator "${expression[i]}" at position ${i} is missing a ${missingSide} value.`);
+                    throw sideError("left-hand");
                 }
+            }
+            if (i === expression.length - 1 || !isValidAfterOperator(expression[i+1])) {
+                throw sideError("right-hand");
             }
             symbols.push(new Symbol(OPERATOR, expression[i]));
         }
