@@ -44,6 +44,10 @@ test('calculates (4+3)*2 and returns total of 14', () => testTotal("(4+3)*2", 14
 // dice rolls
 test('calculates 1d1+1 and returns total of 2', () => testTotal("1d1+1", 2));
 test('calculates 1D1+1 and returns total of 2', () => testTotal("1D1+1", 2));
+test('calculates 1d10 with random values [.3] and returns total of 4', () =>
+    testTotal("1d10", 4, [.3]));
+test('calculates d10 with random values [.3] and returns total of 4 (assuming 1d10)', () =>
+    testTotal("d10", 4, [.3]));
 test('calculates 3d10 with random values [.0, .1, .3] and returns total of 7', () =>
     testTotal("3d10", 7, [.0, .1, .3]));
 
@@ -58,6 +62,8 @@ test('calculates 2h3d10 with random values [.0, .1, .3], keeps 2 highest rolls t
     testTotal("2h3d10", 6, [.0, .1, .3]));
 test('calculates 1h3d10 with random values [.0, .1, .3], keeps highest roll to return total of 4', () =>
     testTotal("1h3d10", 4, [.0, .1, .3]));
+    test('calculates h3d10 with random values [.0, .1, .3], keeps highest roll to return total of 4 (assumes 1h3d10)', () =>
+    testTotal("h3d10", 4, [.0, .1, .3]));
 test('calculates 2l3d10 with random values [.0, .1, .3], keeps 2 lowest rolls to return total of 3', () =>
     testTotal("2l3d10", 3, [.0, .1, .3]));
 test('calculates 3l3d10 with random values [.0, .1, .3], keeps all rolls to return total of 7', () =>
