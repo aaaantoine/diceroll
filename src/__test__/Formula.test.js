@@ -50,6 +50,8 @@ test('calculates 3d10 with random values [.0, .1, .3] and returns total of 7', (
 // compound
 test('calculates 2*(2d10-4) with random values [.8, .9] and returns total of 30', () =>
     testTotal("2*(2d10-4)", 30, [.8, .9]));
+test('calculates 2(2d10-4) with random values [.8, .9] and returns total of 30 (assuming 2*(2d10-4))', () =>
+    testTotal("2(2d10-4)", 30, [.8, .9]));
 
 // Keep high/low
 test('calculates 2h3d10 with random values [.0, .1, .3], keeps 2 highest rolls to return total of 6', () =>

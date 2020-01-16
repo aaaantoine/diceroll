@@ -101,6 +101,11 @@ function parseSymbols(expression) {
         }
         else if (expression[i] === '(')
         {
+            // If number precedes opening paren, treat as multiplier.
+            if (i > 0 && isNumberPart(expression[i-1])) {
+                symbols.push(new Symbol(OPERATOR, TIMES));
+            }
+
             parenCount++;
             symbols.push(new Symbol(COMPOUND, ''));
         }
