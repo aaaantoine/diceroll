@@ -78,15 +78,31 @@ function parseSymbols(expression) {
             }
         }
         else if (isOperator(expression[i])) {
+            const isRollRelated =
+                [HIGHEST, LOWEST, ROLL].includes(expression[i]);
             function sideError(side) {
                 return new Error(`Operator "${expression[i]}" at position ${i} is missing a ${side} value.`);
             }
             if (i === 0 || !isValidBeforeOperator(expression[i-1])) {
-                if ([HIGHEST, LOWEST, ROLL].includes(expression[i])) {
+                if (isRollRelated) {
                     // Assume e.g. d10 == 1d10 and h2d20 == 1h2d20
                     symbols.push(NumberSymbol(1));
                 } else {
                     throw sideError("left-hand");
+                }
+            }
+            if (i > 0 && isRollRelated) {
+                const predecessorIsRoll = symbols.length >= 2 &&
+                    symbols
+                        .slice(symbols.length - 2, symbols.length)
+                        .some(x => x.text === ROLL);
+                if (predecessorIsRoll) {
+                    throw new Error(`Invalid placement of operator "${expression[i]}" at position ${i}.`);
+                }
+                const predecessorIsCompound = symbols.length >= 1 &&
+                    symbols[symbols.length -1].type === COMPOUND;
+                if (predecessorIsCompound) {
+                    throw new Error(`At position ${i}: Calculating number of dice in a pool is not supported.`);
                 }
             }
             if (i === expression.length - 1) {

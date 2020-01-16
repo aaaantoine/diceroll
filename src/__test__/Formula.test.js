@@ -37,6 +37,9 @@ test('throws exception when calculating (2*(2+2)', () => {
 test('throws exception when calculating d', () => {
     expect(() => Formula.calculate("d")).toThrow(new Error('Operator "d" at position 0 is missing a right-hand value.'));
 });
+test('throws exception when calculating d4d6', () => {
+    expect(() => Formula.calculate("d4d6")).toThrow(new Error('Invalid placement of operator "d" at position 2.'));
+});
 
 // straight math
 test('calculates 1+1 and returns total of 2', () => testTotal("1+1", 2));
@@ -57,6 +60,9 @@ test('calculates 3+d10 with random values [.3] and returns total of 7 (assuming 
     testTotal("3+d10", 7, [.3]));
 test('throws exception when calculating d(2+2)', () => {
     expect(() => Formula.calculate("d(2+2)")).toThrow(new Error('At position 1: Calculating number of sides per die is not supported.'));
+});
+test('throws exception when calculating (d4)d6', () => {
+    expect(() => Formula.calculate("(d4)d6")).toThrow(new Error('At position 4: Calculating number of dice in a pool is not supported.'));
 });
 
 // compound
