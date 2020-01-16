@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/diceroll/static/css/main.be08fb86.chunk.css",
-    "main.js": "/diceroll/static/js/main.03603b97.chunk.js",
-    "main.js.map": "/diceroll/static/js/main.03603b97.chunk.js.map",
+    "main.css": "/diceroll/static/css/main.c2732b75.chunk.css",
+    "main.js": "/diceroll/static/js/main.6e31f8c9.chunk.js",
+    "main.js.map": "/diceroll/static/js/main.6e31f8c9.chunk.js.map",
     "runtime-main.js": "/diceroll/static/js/runtime-main.9cabb535.js",
     "runtime-main.js.map": "/diceroll/static/js/runtime-main.9cabb535.js.map",
     "static/js/2.b7a1a2f1.chunk.js": "/diceroll/static/js/2.b7a1a2f1.chunk.js",
     "static/js/2.b7a1a2f1.chunk.js.map": "/diceroll/static/js/2.b7a1a2f1.chunk.js.map",
     "index.html": "/diceroll/index.html",
-    "precache-manifest.517637c865e57a84844611a89152c083.js": "/diceroll/precache-manifest.517637c865e57a84844611a89152c083.js",
+    "precache-manifest.39cc16a30d59f0788883be7c43861e18.js": "/diceroll/precache-manifest.39cc16a30d59f0788883be7c43861e18.js",
     "service-worker.js": "/diceroll/service-worker.js",
-    "static/css/main.be08fb86.chunk.css.map": "/diceroll/static/css/main.be08fb86.chunk.css.map",
+    "static/css/main.c2732b75.chunk.css.map": "/diceroll/static/css/main.c2732b75.chunk.css.map",
     "static/js/2.b7a1a2f1.chunk.js.LICENSE": "/diceroll/static/js/2.b7a1a2f1.chunk.js.LICENSE",
     "static/media/App.css": "/diceroll/static/media/d8.02b2265e.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.9cabb535.js",
     "static/js/2.b7a1a2f1.chunk.js",
-    "static/css/main.be08fb86.chunk.css",
-    "static/js/main.03603b97.chunk.js"
+    "static/css/main.c2732b75.chunk.css",
+    "static/js/main.6e31f8c9.chunk.js"
   ]
 }
