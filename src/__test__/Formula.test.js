@@ -109,3 +109,6 @@ test('throws exception when calculating " 2+*2"', () => {
 test('throws exception when calculating " *2+2"', () => {
     expect(() => Formula.calculate(" *2+2")).toThrow(new Error('At position 1: Operator "*" is missing a left-hand value.'));
 });
+test('throws exception when calculating "2+2+ "', () => {
+    expect(() => Formula.calculate("2+2+ ")).toThrow(new Error('At position 3: Operator "+" is missing a right-hand value.'));
+});

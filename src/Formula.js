@@ -114,7 +114,7 @@ function parseSymbols(expression, startPosition) {
                     throw parserError(i, "Calculating number of dice in a pool is not supported.");
                 }
             }
-            if (i === expression.length - 1) {
+            if (i === expression.length - 1 || expression.slice(i+1).trim() === '') {
                 throw sideError("right-hand");
             }
             symbols.push(new Symbol(OPERATOR, expression[i]));
