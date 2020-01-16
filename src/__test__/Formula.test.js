@@ -22,6 +22,15 @@ function testTotal(expression, expected, randomSequence) {
 test('throws exception when calculating abc', () => {
     expect(() => Formula.calculate("abc")).toThrow(new Error('Unrecognized character "a" at position 0.'));
 });
+test('throws exception when calculating 2+2+', () => {
+    expect(() => Formula.calculate("2+2+")).toThrow(new Error('Operator "+" at position 3 is missing a right-hand value.'));
+});
+test('throws exception when calculating *2+2', () => {
+    expect(() => Formula.calculate("*2+2")).toThrow(new Error('Operator "*" at position 0 is missing a left-hand value.'));
+});
+test('throws exception when calculating 2+*2', () => {
+    expect(() => Formula.calculate("2+*2")).toThrow(new Error('Operator "+" at position 1 is missing a right-hand value.'));
+});
 
 // straight math
 test('calculates 1+1 and returns total of 2', () => testTotal("1+1", 2));

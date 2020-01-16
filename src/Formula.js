@@ -37,6 +37,24 @@ function NumberSymbol(value) {
 }
 
 function parseSymbols(expression) {
+    function isOperator(character) {
+        return character === PLUS ||
+            character === MINUS ||
+            character === TIMES ||
+            character === DIV ||
+            character === ROLL ||
+            character === LOWEST ||
+            character === HIGHEST;
+    }
+    function isNumberPart(character) {
+        return character >= '0' && character <= '9';
+    }
+    function isValidBeforeOperator(character) {
+        return character === ")" || isNumberPart(character);
+    }
+    function isValidAfterOperator(character) {
+        return character === "(" || isNumberPart(character);
+    }
     let symbols = [];
     let parenCount = 0;
     for (let i = 0; i < expression.length; i++) {
@@ -62,16 +80,18 @@ function parseSymbols(expression) {
                 symbols[symbols.length - 1].text += expression[i];
             }
         }
-        else if (expression[i] === PLUS ||
-            expression[i] === MINUS ||
-            expression[i] === TIMES ||
-            expression[i] === DIV ||
-            expression[i] === ROLL ||
-            expression[i] === LOWEST ||
-            expression[i] === HIGHEST) {
+        else if (isOperator(expression[i])) {
+            const missingSide = i === 0 || !isValidBeforeOperator(expression[i-1])
+                ? "left-hand"
+                : i === expression.length - 1 || !isValidAfterOperator(expression[i+1])
+                    ? "right-hand"
+                    : null;
+            if (missingSide) {
+                throw new Error(`Operator "${expression[i]}" at position ${i} is missing a ${missingSide} value.`);
+            }
             symbols.push(new Symbol(OPERATOR, expression[i]));
         }
-        else if (expression[i] >= '0' && expression[i] <= '9') {
+        else if (isNumberPart(expression[i])) {
             if (!lastSymbol || lastSymbol.type !== NUMBER) {
                 symbols.push(new Symbol(NUMBER, expression[i]));
             }
