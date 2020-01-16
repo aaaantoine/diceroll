@@ -20,28 +20,28 @@ function testTotal(expression, expected, randomSequence) {
 
 // parsing
 test('throws exception when calculating abc', () => {
-    expect(() => Formula.calculate("abc")).toThrow(new Error('Unrecognized character "a" at position 0.'));
+    expect(() => Formula.calculate("abc")).toThrow(new Error('At position 0: Unrecognized character "a".'));
 });
 test('throws exception when calculating 2+2+', () => {
-    expect(() => Formula.calculate("2+2+")).toThrow(new Error('Operator "+" at position 3 is missing a right-hand value.'));
+    expect(() => Formula.calculate("2+2+")).toThrow(new Error('At position 3: Operator "+" is missing a right-hand value.'));
 });
 test('throws exception when calculating 2+(2+)', () => {
-    expect(() => Formula.calculate("2+(2+)")).toThrow(new Error('Operator "+" at position 4 is missing a right-hand value.'));
+    expect(() => Formula.calculate("2+(2+)")).toThrow(new Error('At position 4: Operator "+" is missing a right-hand value.'));
 });
 test('throws exception when calculating *2+2', () => {
-    expect(() => Formula.calculate("*2+2")).toThrow(new Error('Operator "*" at position 0 is missing a left-hand value.'));
+    expect(() => Formula.calculate("*2+2")).toThrow(new Error('At position 0: Operator "*" is missing a left-hand value.'));
 });
 test('throws exception when calculating 2+*2', () => {
-    expect(() => Formula.calculate("2+*2")).toThrow(new Error('Operator "*" at position 2 is missing a left-hand value.'));
+    expect(() => Formula.calculate("2+*2")).toThrow(new Error('At position 2: Operator "*" is missing a left-hand value.'));
 });
 test('throws exception when calculating (2*(2+2)', () => {
     expect(() => Formula.calculate("(2*(2+2)")).toThrow(new Error('Parentheses mismatch. Counted 2 opening and 1 closing.'));
 });
 test('throws exception when calculating d', () => {
-    expect(() => Formula.calculate("d")).toThrow(new Error('Operator "d" at position 0 is missing a right-hand value.'));
+    expect(() => Formula.calculate("d")).toThrow(new Error('At position 0: Operator "d" is missing a right-hand value.'));
 });
 test('throws exception when calculating d4d6', () => {
-    expect(() => Formula.calculate("d4d6")).toThrow(new Error('Invalid placement of operator "d" at position 2.'));
+    expect(() => Formula.calculate("d4d6")).toThrow(new Error('At position 2: Invalid placement of operator "d".'));
 });
 
 // straight math

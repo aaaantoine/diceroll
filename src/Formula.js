@@ -41,6 +41,9 @@ function parseSymbols(expression, startPosition) {
     function pos(i) {
         return startPosition + i;
     }
+    function parserError(i, message) {
+        return new Error(`At position ${pos(i)}: ${message}`);
+    }
     function isOperator(character) {
         return character === PLUS ||
             character === MINUS ||
@@ -85,7 +88,7 @@ function parseSymbols(expression, startPosition) {
             const isRollRelated =
                 [HIGHEST, LOWEST, ROLL].includes(expression[i]);
             function sideError(side) {
-                return new Error(`Operator "${expression[i]}" at position ${pos(i)} is missing a ${side} value.`);
+                return parserError(i, `Operator "${expression[i]}" is missing a ${side} value.`);
             }
             if (i === 0 || !isValidBeforeOperator(expression[i-1])) {
                 if (isRollRelated) {
@@ -101,12 +104,12 @@ function parseSymbols(expression, startPosition) {
                         .slice(symbols.length - 2, symbols.length)
                         .some(x => x.text === ROLL);
                 if (predecessorIsRoll) {
-                    throw new Error(`Invalid placement of operator "${expression[i]}" at position ${pos(i)}.`);
+                    throw parserError(i, `Invalid placement of operator "${expression[i]}".`);
                 }
                 const predecessorIsCompound = symbols.length >= 1 &&
                     symbols[symbols.length -1].type === COMPOUND;
                 if (predecessorIsCompound) {
-                    throw new Error(`At position ${pos(i)}: Calculating number of dice in a pool is not supported.`);
+                    throw parserError(i, "Calculating number of dice in a pool is not supported.");
                 }
             }
             if (i === expression.length - 1) {
@@ -129,7 +132,7 @@ function parseSymbols(expression, startPosition) {
                     // If number precedes opening paren, treat as multiplier.
                     symbols.push(new Symbol(OPERATOR, TIMES));
                 } else if (expression[i-1] === ROLL) {
-                    throw new Error(`At position ${pos(i)}: Calculating number of sides per die is not supported.`)
+                    throw parserError(i, "Calculating number of sides per die is not supported.");
                 }
             }
 
@@ -138,7 +141,7 @@ function parseSymbols(expression, startPosition) {
             symbols[symbols.length-1]._pos = pos(i) + 1;
         }
         else {
-            throw new Error(`Unrecognized character "${expression[i]}" at position ${pos(i)}.`);
+            throw parserError(i, `Unrecognized character "${expression[i]}".`);
         }
     }
 
