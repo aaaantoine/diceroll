@@ -55,6 +55,9 @@ test('calculates 3d10 with random values [.0, .1, .3] and returns total of 7', (
     testTotal("3d10", 7, [.0, .1, .3]));
 test('calculates 3+d10 with random values [.3] and returns total of 7 (assuming 3+1d10)', () =>
     testTotal("3+d10", 7, [.3]));
+test('throws exception when calculating d(2+2)', () => {
+    expect(() => Formula.calculate("d(2+2)")).toThrow(new Error('At position 1: Calculating number of sides per die is not supported.'));
+});
 
 // compound
 test('calculates 2*(2d10-4) with random values [.8, .9] and returns total of 30', () =>

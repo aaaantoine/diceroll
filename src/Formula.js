@@ -104,9 +104,13 @@ function parseSymbols(expression) {
         }
         else if (expression[i] === '(')
         {
-            // If number precedes opening paren, treat as multiplier.
-            if (i > 0 && isNumberPart(expression[i-1])) {
-                symbols.push(new Symbol(OPERATOR, TIMES));
+            if (i > 0) {
+                if (isNumberPart(expression[i-1])) {
+                    // If number precedes opening paren, treat as multiplier.
+                    symbols.push(new Symbol(OPERATOR, TIMES));
+                } else if (expression[i-1] === ROLL) {
+                    throw new Error(`At position ${i}: Calculating number of sides per die is not supported.`)
+                }
             }
 
             parenCount++;
