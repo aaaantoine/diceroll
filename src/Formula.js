@@ -52,9 +52,6 @@ function parseSymbols(expression) {
     function isValidBeforeOperator(character) {
         return character === ")" || isNumberPart(character);
     }
-    function isValidAfterOperator(character) {
-        return character === "(" || isNumberPart(character);
-    }
     let symbols = [];
     let parenCount = 0;
     for (let i = 0; i < expression.length; i++) {
@@ -92,7 +89,7 @@ function parseSymbols(expression) {
                     throw sideError("left-hand");
                 }
             }
-            if (i === expression.length - 1 || !isValidAfterOperator(expression[i+1])) {
+            if (i === expression.length - 1) {
                 throw sideError("right-hand");
             }
             symbols.push(new Symbol(OPERATOR, expression[i]));

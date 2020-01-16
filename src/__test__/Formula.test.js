@@ -29,7 +29,7 @@ test('throws exception when calculating *2+2', () => {
     expect(() => Formula.calculate("*2+2")).toThrow(new Error('Operator "*" at position 0 is missing a left-hand value.'));
 });
 test('throws exception when calculating 2+*2', () => {
-    expect(() => Formula.calculate("2+*2")).toThrow(new Error('Operator "+" at position 1 is missing a right-hand value.'));
+    expect(() => Formula.calculate("2+*2")).toThrow(new Error('Operator "*" at position 2 is missing a left-hand value.'));
 });
 test('throws exception when calculating (2*(2+2)', () => {
     expect(() => Formula.calculate("(2*(2+2)")).toThrow(new Error('Parentheses mismatch. Counted 2 opening and 1 closing.'));
@@ -53,6 +53,8 @@ test('calculates d10 with random values [.3] and returns total of 4 (assuming 1d
     testTotal("d10", 4, [.3]));
 test('calculates 3d10 with random values [.0, .1, .3] and returns total of 7', () =>
     testTotal("3d10", 7, [.0, .1, .3]));
+test('calculates 3+d10 with random values [.3] and returns total of 7 (assuming 3+1d10)', () =>
+    testTotal("3+d10", 7, [.3]));
 
 // compound
 test('calculates 2*(2d10-4) with random values [.8, .9] and returns total of 30', () =>
