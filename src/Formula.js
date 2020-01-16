@@ -61,7 +61,9 @@ function parseSymbols(expression, startPosition) {
     }
     let symbols = [];
     let parenCount = 0;
+    let lastChar = null;
     for (let i = 0; i < expression.length; i++) {
+        let includeChar = true;
         let lastSymbol = symbols.length > 0
             ? symbols[symbols.length - 1]
             : null;
@@ -90,7 +92,7 @@ function parseSymbols(expression, startPosition) {
             function sideError(side) {
                 return parserError(i, `Operator "${expression[i]}" is missing a ${side} value.`);
             }
-            if (i === 0 || !isValidBeforeOperator(expression[i-1])) {
+            if (lastChar === null || !isValidBeforeOperator(lastChar)) {
                 if (isRollRelated) {
                     // Assume e.g. d10 == 1d10 and h2d20 == 1h2d20
                     symbols.push(NumberSymbol(1));
@@ -127,11 +129,11 @@ function parseSymbols(expression, startPosition) {
         }
         else if (expression[i] === '(')
         {
-            if (i > 0) {
-                if (isNumberPart(expression[i-1])) {
+            if (lastChar !== null) {
+                if (isNumberPart(lastChar)) {
                     // If number precedes opening paren, treat as multiplier.
                     symbols.push(new Symbol(OPERATOR, TIMES));
-                } else if (expression[i-1] === ROLL) {
+                } else if (lastChar === ROLL) {
                     throw parserError(i, "Calculating number of sides per die is not supported.");
                 }
             }
@@ -140,9 +142,15 @@ function parseSymbols(expression, startPosition) {
             symbols.push(new Symbol(COMPOUND, ''));
             symbols[symbols.length-1]._pos = pos(i) + 1;
         }
+        else if (expression[i] === ' ') {
+            // ignore character but retain position.
+            includeChar = false;
+        }
         else {
             throw parserError(i, `Unrecognized character "${expression[i]}".`);
         }
+        
+        lastChar = includeChar ? expression[i] : lastChar;
     }
 
     // convert COMPOUND symbols to sub-arrays.
