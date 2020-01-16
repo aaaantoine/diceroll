@@ -7,17 +7,17 @@ export default class Diceroll extends React.Component {
         this.maxResults = 50;
         this.state = {
             formula: null,
-            formulaIsInvalid: false,
+            formulaError: null,
             results: [],
             showHelp: false
         };
     }
 
     render() {
-        const error = this.state.formulaIsInvalid
+        const error = this.state.formulaError
             ? (
                 <div class="alert alert-danger" role="alert">
-                    The formula is invalid.
+                    {this.state.formulaError.message}
                 </div>
             )
             : "";
@@ -198,8 +198,8 @@ export default class Diceroll extends React.Component {
         try {
             const result = Formula.calculate(this.state.formula);
             this.addResult(result);
-        } catch {
-            this.setState({formulaIsInvalid: true});
+        } catch(ex) {
+            this.setState({formulaError: ex});
         }
     }
 
@@ -211,7 +211,7 @@ export default class Diceroll extends React.Component {
         }
         this.setState({
             results: results,
-            formulaIsInvalid: false
+            formulaError: null
         });
     }
 }
