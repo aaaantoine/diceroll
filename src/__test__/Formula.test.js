@@ -20,7 +20,7 @@ function testTotal(expression, expected, randomSequence) {
 
 // parsing
 test('throws exception when calculating abc', () => {
-    expect(() => Formula.calculate("abc")).toThrow(new Error('Formula is invalid.'));
+    expect(() => Formula.calculate("abc")).toThrow(new Error('Unrecognized character "a" at position 0.'));
 });
 
 // straight math

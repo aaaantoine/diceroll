@@ -84,6 +84,9 @@ function parseSymbols(expression) {
             parenCount++;
             symbols.push(new Symbol(COMPOUND, ''));
         }
+        else {
+            throw new Error(`Unrecognized character "${expression[i]}" at position ${i}.`);
+        }
     }
 
     // convert COMPOUND symbols to sub-arrays.
@@ -196,11 +199,9 @@ function validate(expression) {
         const pattern = new RegExp('\\'+symbol, "g");
         return (expression.match(pattern) || []).length;
     }
-    const regex = /^\(*\d+(\)*[dhl+\-*/]\(*\d+)*\)*$/;
-    const isMatch = !!expression.match(regex);
     const countLeft = count('(');
     const countRight = count(')');
-    return isMatch && countLeft === countRight;
+    return countLeft === countRight;
 }
 
 function subCalculate(symbols) {
