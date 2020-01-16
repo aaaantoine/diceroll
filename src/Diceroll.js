@@ -26,7 +26,7 @@ export default class Diceroll extends React.Component {
                 <div class="alert alert-info help">
                     <h2>Help</h2>
                     <p>
-                        <em>Click the <strong>Help</strong> button again to dismiss this info box.</em>
+                        <small><em>Click the <strong>Help</strong> button again to dismiss this info box.</em></small>
                     </p>
                     <p>
                         Any positive integer number can be entered as part of the formula.
