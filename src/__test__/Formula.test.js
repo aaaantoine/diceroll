@@ -43,6 +43,9 @@ test('throws exception when calculating d', () => {
 test('throws exception when calculating d4d6', () => {
     expect(() => Formula.calculate("d4d6")).toThrow(new Error('At position 2: Invalid placement of operator "d".'));
 });
+test('throws exception when calculating "2 3d6"', () => {
+    expect(() => Formula.calculate("2 3d6")).toThrow(new Error('At position 2: Invalid spacing between numeric characters.'));
+});
 
 // straight math
 test('calculates 1+1 and returns total of 2', () => testTotal("1+1", 2));
@@ -95,4 +98,17 @@ test('throws exception when calculating 1h(4+5)', () => {
 });
 test('throws exception when calculating 1l12', () => {
     expect(() => Formula.calculate("1h12")).toThrow(new Error(highestVsDiceOnly));
+});
+
+// spacing
+test('calculates " 1+1 " and returns total of 2', () => testTotal(" 1+1 ", 2));
+test('calculates "1 + 1" and returns total of 2', () => testTotal("1 + 1", 2));
+test('throws exception when calculating " 2+*2"', () => {
+    expect(() => Formula.calculate(" 2+*2")).toThrow(new Error('At position 3: Operator "*" is missing a left-hand value.'));
+});
+test('throws exception when calculating " *2+2"', () => {
+    expect(() => Formula.calculate(" *2+2")).toThrow(new Error('At position 1: Operator "*" is missing a left-hand value.'));
+});
+test('throws exception when calculating "2+2+ "', () => {
+    expect(() => Formula.calculate("2+2+ ")).toThrow(new Error('At position 3: Operator "+" is missing a right-hand value.'));
 });
