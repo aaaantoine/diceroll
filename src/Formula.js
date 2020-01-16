@@ -123,6 +123,9 @@ function parseSymbols(expression, startPosition) {
             if (!lastSymbol || lastSymbol.type !== NUMBER) {
                 symbols.push(new Symbol(NUMBER, expression[i]));
             }
+            else if (lastSymbol && expression[i-1] === ' ') {
+                throw parserError(i, "Invalid spacing between numeric characters.");
+            }
             else {
                 lastSymbol.text += expression[i];
             }
