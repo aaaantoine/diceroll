@@ -26,7 +26,7 @@ export default class Diceroll extends React.Component {
                 <div class="alert alert-info help">
                     <h2>Help</h2>
                     <p>
-                        <em>Click the <strong>Help</strong> button again to dismiss this info box.</em>
+                        <small><em>Click the <strong>Help</strong> button again to dismiss this info box.</em></small>
                     </p>
                     <p>
                         Any positive integer number can be entered as part of the formula.
@@ -75,8 +75,13 @@ export default class Diceroll extends React.Component {
                             <li><code>1l2d20+3</code>: Rolls 2 20-sided dice, only counts the lowest, and adds 3.</li>
                         </ul>
                     </p>
+                    <div class="container-fluid">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-info" type="button"
+                                onClick={() => this.handleHelpClick()}>Close</button>
+                        </div>
+                    </div>
                 </div>
-
             )
             : "";
         const helpButtonClass = "btn btn-outline-secondary" +
