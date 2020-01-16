@@ -36,7 +36,29 @@ function NumberSymbol(value) {
     return new Symbol(NUMBER, value.toString());
 }
 
-function parseSymbols(expression) {
+function parseSymbols(expression, startPosition) {
+    startPosition = startPosition || 0;
+    function pos(i) {
+        return startPosition + i;
+    }
+    function parserError(i, message) {
+        return new Error(`At position ${pos(i)}: ${message}`);
+    }
+    function isOperator(character) {
+        return character === PLUS ||
+            character === MINUS ||
+            character === TIMES ||
+            character === DIV ||
+            character === ROLL ||
+            character === LOWEST ||
+            character === HIGHEST;
+    }
+    function isNumberPart(character) {
+        return character >= '0' && character <= '9';
+    }
+    function isValidBeforeOperator(character) {
+        return character === ")" || isNumberPart(character);
+    }
     let symbols = [];
     let parenCount = 0;
     for (let i = 0; i < expression.length; i++) {
@@ -62,16 +84,40 @@ function parseSymbols(expression) {
                 symbols[symbols.length - 1].text += expression[i];
             }
         }
-        else if (expression[i] === PLUS ||
-            expression[i] === MINUS ||
-            expression[i] === TIMES ||
-            expression[i] === DIV ||
-            expression[i] === ROLL ||
-            expression[i] === LOWEST ||
-            expression[i] === HIGHEST) {
+        else if (isOperator(expression[i])) {
+            const isRollRelated =
+                [HIGHEST, LOWEST, ROLL].includes(expression[i]);
+            function sideError(side) {
+                return parserError(i, `Operator "${expression[i]}" is missing a ${side} value.`);
+            }
+            if (i === 0 || !isValidBeforeOperator(expression[i-1])) {
+                if (isRollRelated) {
+                    // Assume e.g. d10 == 1d10 and h2d20 == 1h2d20
+                    symbols.push(NumberSymbol(1));
+                } else {
+                    throw sideError("left-hand");
+                }
+            }
+            if (i > 0 && isRollRelated) {
+                const predecessorIsRoll = symbols.length >= 2 &&
+                    symbols
+                        .slice(symbols.length - 2, symbols.length)
+                        .some(x => x.text === ROLL);
+                if (predecessorIsRoll) {
+                    throw parserError(i, `Invalid placement of operator "${expression[i]}".`);
+                }
+                const predecessorIsCompound = symbols.length >= 1 &&
+                    symbols[symbols.length -1].type === COMPOUND;
+                if (predecessorIsCompound) {
+                    throw parserError(i, "Calculating number of dice in a pool is not supported.");
+                }
+            }
+            if (i === expression.length - 1) {
+                throw sideError("right-hand");
+            }
             symbols.push(new Symbol(OPERATOR, expression[i]));
         }
-        else if (expression[i] >= '0' && expression[i] <= '9') {
+        else if (isNumberPart(expression[i])) {
             if (!lastSymbol || lastSymbol.type !== NUMBER) {
                 symbols.push(new Symbol(NUMBER, expression[i]));
             }
@@ -81,15 +127,28 @@ function parseSymbols(expression) {
         }
         else if (expression[i] === '(')
         {
+            if (i > 0) {
+                if (isNumberPart(expression[i-1])) {
+                    // If number precedes opening paren, treat as multiplier.
+                    symbols.push(new Symbol(OPERATOR, TIMES));
+                } else if (expression[i-1] === ROLL) {
+                    throw parserError(i, "Calculating number of sides per die is not supported.");
+                }
+            }
+
             parenCount++;
             symbols.push(new Symbol(COMPOUND, ''));
+            symbols[symbols.length-1]._pos = pos(i) + 1;
+        }
+        else {
+            throw parserError(i, `Unrecognized character "${expression[i]}".`);
         }
     }
 
     // convert COMPOUND symbols to sub-arrays.
     for (let i = 0; i < symbols.length; i++) {
         if (symbols[i].type === COMPOUND) {
-            symbols[i] = parseSymbols(symbols[i].text);
+            symbols[i] = parseSymbols(symbols[i].text, symbols[i]._pos);
         }
     }
     
@@ -191,16 +250,16 @@ function performOperations(symbols, ops, randomizer)
     return newSymbols;
 }
 
-function validate(expression) {
+function testParentheses(expression) {
     function count(symbol) {
         const pattern = new RegExp('\\'+symbol, "g");
         return (expression.match(pattern) || []).length;
     }
-    const regex = /^\(*\d+(\)*[dhl+\-*/]\(*\d+)*\)*$/;
-    const isMatch = !!expression.match(regex);
     const countLeft = count('(');
     const countRight = count(')');
-    return isMatch && countLeft === countRight;
+    if (countLeft !== countRight) {
+        throw new Error(`Parentheses mismatch. Counted ${countLeft} opening and ${countRight} closing.`);
+    }
 }
 
 function subCalculate(symbols) {
@@ -262,9 +321,7 @@ function rollAll(symbols, randomizer) {
 function calculate(expression, randomizer)
 {
     const lowerExpression = expression.toLowerCase();
-    if (!validate(lowerExpression)) {
-        throw new Error("Formula is invalid.");
-    }
+    testParentheses(lowerExpression);
 
     let symbols = parseSymbols(lowerExpression);
     symbols = rollAll(symbols, randomizer);
