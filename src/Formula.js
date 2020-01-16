@@ -36,7 +36,11 @@ function NumberSymbol(value) {
     return new Symbol(NUMBER, value.toString());
 }
 
-function parseSymbols(expression) {
+function parseSymbols(expression, startPosition) {
+    startPosition = startPosition || 0;
+    function pos(i) {
+        return startPosition + i;
+    }
     function isOperator(character) {
         return character === PLUS ||
             character === MINUS ||
@@ -81,7 +85,7 @@ function parseSymbols(expression) {
             const isRollRelated =
                 [HIGHEST, LOWEST, ROLL].includes(expression[i]);
             function sideError(side) {
-                return new Error(`Operator "${expression[i]}" at position ${i} is missing a ${side} value.`);
+                return new Error(`Operator "${expression[i]}" at position ${pos(i)} is missing a ${side} value.`);
             }
             if (i === 0 || !isValidBeforeOperator(expression[i-1])) {
                 if (isRollRelated) {
@@ -97,12 +101,12 @@ function parseSymbols(expression) {
                         .slice(symbols.length - 2, symbols.length)
                         .some(x => x.text === ROLL);
                 if (predecessorIsRoll) {
-                    throw new Error(`Invalid placement of operator "${expression[i]}" at position ${i}.`);
+                    throw new Error(`Invalid placement of operator "${expression[i]}" at position ${pos(i)}.`);
                 }
                 const predecessorIsCompound = symbols.length >= 1 &&
                     symbols[symbols.length -1].type === COMPOUND;
                 if (predecessorIsCompound) {
-                    throw new Error(`At position ${i}: Calculating number of dice in a pool is not supported.`);
+                    throw new Error(`At position ${pos(i)}: Calculating number of dice in a pool is not supported.`);
                 }
             }
             if (i === expression.length - 1) {
@@ -125,22 +129,23 @@ function parseSymbols(expression) {
                     // If number precedes opening paren, treat as multiplier.
                     symbols.push(new Symbol(OPERATOR, TIMES));
                 } else if (expression[i-1] === ROLL) {
-                    throw new Error(`At position ${i}: Calculating number of sides per die is not supported.`)
+                    throw new Error(`At position ${pos(i)}: Calculating number of sides per die is not supported.`)
                 }
             }
 
             parenCount++;
             symbols.push(new Symbol(COMPOUND, ''));
+            symbols[symbols.length-1]._pos = pos(i) + 1;
         }
         else {
-            throw new Error(`Unrecognized character "${expression[i]}" at position ${i}.`);
+            throw new Error(`Unrecognized character "${expression[i]}" at position ${pos(i)}.`);
         }
     }
 
     // convert COMPOUND symbols to sub-arrays.
     for (let i = 0; i < symbols.length; i++) {
         if (symbols[i].type === COMPOUND) {
-            symbols[i] = parseSymbols(symbols[i].text);
+            symbols[i] = parseSymbols(symbols[i].text, symbols[i]._pos);
         }
     }
     

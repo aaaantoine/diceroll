@@ -25,6 +25,9 @@ test('throws exception when calculating abc', () => {
 test('throws exception when calculating 2+2+', () => {
     expect(() => Formula.calculate("2+2+")).toThrow(new Error('Operator "+" at position 3 is missing a right-hand value.'));
 });
+test('throws exception when calculating 2+(2+)', () => {
+    expect(() => Formula.calculate("2+(2+)")).toThrow(new Error('Operator "+" at position 4 is missing a right-hand value.'));
+});
 test('throws exception when calculating *2+2', () => {
     expect(() => Formula.calculate("*2+2")).toThrow(new Error('Operator "*" at position 0 is missing a left-hand value.'));
 });
@@ -46,6 +49,7 @@ test('calculates 1+1 and returns total of 2', () => testTotal("1+1", 2));
 test('calculates 8*4 and returns total of 32', () => testTotal("8*4", 32));
 test('calculates 4+3*2 and returns total of 10', () => testTotal("4+3*2", 10));
 test('calculates (4+3)*2 and returns total of 14', () => testTotal("(4+3)*2", 14));
+test('calculates 2+(2+2) and returns total of 6', () => testTotal("2+(2+2)", 6));
 
 // dice rolls
 test('calculates 1d1+1 and returns total of 2', () => testTotal("1d1+1", 2));
