@@ -214,14 +214,16 @@ function performOperations(symbols, ops, randomizer)
     return newSymbols;
 }
 
-function validate(expression) {
+function testParentheses(expression) {
     function count(symbol) {
         const pattern = new RegExp('\\'+symbol, "g");
         return (expression.match(pattern) || []).length;
     }
     const countLeft = count('(');
     const countRight = count(')');
-    return countLeft === countRight;
+    if (countLeft !== countRight) {
+        throw new Error(`Parentheses mismatch. Counted ${countLeft} opening and ${countRight} closing.`);
+    }
 }
 
 function subCalculate(symbols) {
@@ -283,9 +285,7 @@ function rollAll(symbols, randomizer) {
 function calculate(expression, randomizer)
 {
     const lowerExpression = expression.toLowerCase();
-    if (!validate(lowerExpression)) {
-        throw new Error("Formula is invalid.");
-    }
+    testParentheses(lowerExpression);
 
     let symbols = parseSymbols(lowerExpression);
     symbols = rollAll(symbols, randomizer);
