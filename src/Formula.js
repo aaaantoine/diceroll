@@ -337,6 +337,7 @@ function calculate(expression, randomizer)
     let symbols = parseSymbols(lowerExpression);
     symbols = rollAll(symbols, randomizer);
     return {
+        expression,
         symbols,
         total: subCalculate(symbols)
     };

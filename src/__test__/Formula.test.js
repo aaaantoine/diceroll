@@ -18,6 +18,11 @@ function testTotal(expression, expected, randomSequence) {
     expect(response.total).toBe(expected);
 }
 
+function testFormula(expression, randomSequence) {
+    const response = calculate(expression, randomSequence);
+    expect(response.expression).toBe(expression);
+}
+
 // parsing
 test('throws exception when calculating abc', () => {
     expect(() => Formula.calculate("abc")).toThrow(new Error('At position 0: Unrecognized character "a".'));
@@ -112,3 +117,6 @@ test('throws exception when calculating " *2+2"', () => {
 test('throws exception when calculating "2+2+ "', () => {
     expect(() => Formula.calculate("2+2+ ")).toThrow(new Error('At position 3: Operator "+" is missing a right-hand value.'));
 });
+
+// returns a matching formula
+test('calculates "4 + 2(d6)" and returns formula "4 + 2(d6)"', () => testFormula("4 + 2(d6)"));
