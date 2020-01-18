@@ -13,8 +13,40 @@ export default class InputToolbox extends React.Component {
     }
     render() {
         return (
-            <div class="row">
-                <div class="col-lg-8">
+            <div class="row justify-content-center">
+                <div class="col-lg-4">
+                    <div class="form-row">
+                        <div class="col">
+                            <label>Sides</label>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary dropdown-toggle"
+                                            type="button"
+                                            id="commonDiceDropdown"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true"
+                                            aria-expanded="false">
+                                            Common Dice
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="commonDiceDropdown">
+                                            {this.sidesDropDownOption(2)}
+                                            {this.sidesDropDownOption(4)}
+                                            {this.sidesDropDownOption(6)}
+                                            {this.sidesDropDownOption(8)}
+                                            {this.sidesDropDownOption(10)}
+                                            {this.sidesDropDownOption(12)}
+                                            {this.sidesDropDownOption(20)}
+                                            {this.sidesDropDownOption(100)}
+                                        </div>
+                                    </div>
+                                    <input class="form-control" type="number" min="2" max="1000"
+                                        value={this.state.sidesPerDie}
+                                        onChange={(e) => this.handleSidesPerDieChange(e.target.value)} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="col">
                             <label>Count</label>
@@ -22,34 +54,6 @@ export default class InputToolbox extends React.Component {
                                 <input class="form-control" type="number" min="1" max="1000"
                                     value={this.state.dieCount}
                                     onChange={this.handleDieCountChange} /> 
-                            </div>
-                        </div>
-                        <div class="col">
-                            <label>Sides</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary dropdown-toggle"
-                                        type="button"
-                                        id="commonDiceDropdown"
-                                        data-toggle="dropdown"
-                                        aria-haspopup="true"
-                                        aria-expanded="false">
-                                        Common Dice
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="commonDiceDropdown">
-                                        {this.sidesDropDownOption(2)}
-                                        {this.sidesDropDownOption(4)}
-                                        {this.sidesDropDownOption(6)}
-                                        {this.sidesDropDownOption(8)}
-                                        {this.sidesDropDownOption(10)}
-                                        {this.sidesDropDownOption(12)}
-                                        {this.sidesDropDownOption(20)}
-                                        {this.sidesDropDownOption(100)}
-                                    </div>
-                                </div>
-                                <input class="form-control" type="number" min="2" max="1000"
-                                    value={this.state.sidesPerDie}
-                                    onChange={(e) => this.handleSidesPerDieChange(e.target.value)} />
                             </div>
                         </div>
                     </div>
