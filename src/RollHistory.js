@@ -1,4 +1,5 @@
 import React from 'react';
+import RollSymbol from './RollSymbol.js';
 
 export default class RollHistory extends React.Component {
     render() {
@@ -37,36 +38,8 @@ export default class RollHistory extends React.Component {
     }
 
     renderSymbols(symbols) {
-        const th = this;
-        function getSymbolClass(sides, value) {
-            function classBySides(sides) {
-                switch(sides) {
-                    case 2: return "coin";
-                    case 4: return "d4";
-                    case 6: return "d6";
-                    case 8: return "d8";
-                    case 10: return "d10";
-                    case 12: return "d12";
-                    case 20: return "d20";
-                    default:
-                        return null;
-                }
-            }
-            const prefix = classBySides(sides);
-            return prefix
-                ? `${prefix} ${prefix}-${value}`
-                : "coin";
-        }
-        function renderSymbol(symbol) {
-            const discarded = symbol.discard ? " discarded" : "";
-            const dieClass = symbol.sides
-                ? " die " + getSymbolClass(symbol.sides, symbol.text)
-                : ""
-            const symbolClass = "symbol" + discarded + dieClass;
-            return <span class={symbolClass}>{symbol.text}</span>;
-        }
-        const leftParen = renderSymbol({text: "("});
-        const rightParen = renderSymbol({text: ")"});
+        const leftParen = <RollSymbol symbol={{text: "("}} />;
+        const rightParen = <RollSymbol symbol={{text: ")"}} />;
         return symbols.map(symbol => {
             if (Array.isArray(symbol)) {
                 const renderParen = symbols.length > 1 &&
@@ -76,7 +49,7 @@ export default class RollHistory extends React.Component {
                     );
                 return <span>
                     {renderParen ? leftParen : ""}
-                    {th.renderSymbols(symbol)}
+                    {this.renderSymbols(symbol)}
                     {renderParen ? rightParen : ""}
                 </span>;
             }
@@ -84,7 +57,7 @@ export default class RollHistory extends React.Component {
             if (symbols.some(x => x.sides) && symbol.text === "+") {
                 return "";
             }
-            return renderSymbol(symbol);
+            return <RollSymbol symbol={symbol} />;
         });
     }
 }
