@@ -1,4 +1,5 @@
 import React from 'react';
+import RollSymbol from './RollSymbol.js';
 
 export default class InputToolbox extends React.Component {
     constructor(props) {
@@ -25,10 +26,30 @@ export default class InputToolbox extends React.Component {
                         </div>
                         <div class="col">
                             <label>Sides</label>
-                            <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary dropdown-toggle"
+                                        type="button"
+                                        id="commonDiceDropdown"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                        Common Dice
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="commonDiceDropdown">
+                                        {this.sidesDropDownOption(2)}
+                                        {this.sidesDropDownOption(4)}
+                                        {this.sidesDropDownOption(6)}
+                                        {this.sidesDropDownOption(8)}
+                                        {this.sidesDropDownOption(10)}
+                                        {this.sidesDropDownOption(12)}
+                                        {this.sidesDropDownOption(20)}
+                                        {this.sidesDropDownOption(100)}
+                                    </div>
+                                </div>
                                 <input class="form-control" type="number" min="2" max="1000"
                                     value={this.state.sidesPerDie}
-                                    onChange={this.handleSidesPerDieChange} />
+                                    onChange={(e) => this.handleSidesPerDieChange(e.target.value)} />
                             </div>
                         </div>
                     </div>
@@ -53,9 +74,9 @@ export default class InputToolbox extends React.Component {
                                         value={this.state.highLowCount}
                                         onChange={this.handleHighLowCountChange} />
                                 </div>
-                                <div class="col">
+                                <div class="col text-right">
                                     <button class="btn btn-secondary" type="button"
-                                        onClick={this.handleDiceAddClick}>Add</button>
+                                        onClick={this.handleDiceAddClick}>Add Dice</button>
                                 </div>
                             </div>
                         </div>
@@ -72,6 +93,12 @@ export default class InputToolbox extends React.Component {
         );
     }
 
+    sidesDropDownOption = (value) => (
+        <button class="dropdown-item" type="button"
+            onClick={() => this.handleSidesPerDieChange(value)}>
+            <RollSymbol symbol={{sides: value, text: value}} />
+        </button>
+    );
     formulaButton = (value) => (
         <div class="col text-center">
             <button class="btn btn-secondary btn-lg" type="button"
@@ -110,7 +137,7 @@ export default class InputToolbox extends React.Component {
             e.target.value)
     });
     handleHighLowCountChange = (e) => this.setState({highLowCount: e.target.value});
-    handleSidesPerDieChange = (e) => this.setState({sidesPerDie: e.target.value});
+    handleSidesPerDieChange = (value) => this.setState({sidesPerDie: value});
     handleDiceAddClick = (e) => {
         const highLow = this.state.highLow 
             ? this.implicit1(this.state.highLowCount) + this.state.highLow
