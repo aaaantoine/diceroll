@@ -1,6 +1,7 @@
 import React from 'react';
 import Formula from './Formula.js';
 import Help from './Help.js';
+import InputBar from './InputBar.js';
 import RollHistory from './RollHistory.js';
 
 export default class Diceroll extends React.Component {
@@ -8,6 +9,7 @@ export default class Diceroll extends React.Component {
         super(props);
         this.handleHelpClick = this.handleHelpClick.bind(this);
         this.handleReRollClick = this.handleReRollClick.bind(this);
+        this.handleRollClick = this.handleRollClick.bind(this);
         this.maxResults = 50;
         this.state = {
             formula: null,
@@ -28,25 +30,14 @@ export default class Diceroll extends React.Component {
         const helpSection = this.state.showHelp
             ? <Help onCloseRequest={this.handleHelpClick} />
             : "";
-        const helpButtonClass = "btn btn-outline-secondary" +
-            (this.state.showHelp ? " active" : "");
         return (
             <div class="container">
-                <div class="form-group">
-                    <label for="rollFormula">Formula</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="rollFormula"
-                            onKeyUp={(e) => this.handleFormulaKeyUp(e)}
-                            onChange={(e) => this.setState({formula: e.target.value})}
-                            value={this.state.formula} />
-                        <div class="input-group-append">
-                            <button class={helpButtonClass} type="button"
-                                onClick={() => this.handleHelpClick()}>Help</button>
-                            <button class="btn btn-primary" type="submit"
-                                onClick={() => this.handleRollClick()}>Roll</button>
-                        </div>
-                    </div>
-                </div>
+                <InputBar
+                    formula={this.state.formula}
+                    helpIsVisible={this.state.showHelp}
+                    onSetFormulaRequest={value => this.setState({formula: value})}
+                    onRollRequest={this.handleRollClick}
+                    onHelpRequest={this.handleHelpClick} />
                 {error}
                 {helpSection}
                 <RollHistory
@@ -54,12 +45,6 @@ export default class Diceroll extends React.Component {
                     onReRollRequest={this.handleReRollClick} />
             </div>
         );
-    }
-
-    handleFormulaKeyUp(event) {
-        if (event.keyCode === 13) {
-            this.handleRollClick();
-        }
     }
 
     handleHelpClick() {
