@@ -7,9 +7,6 @@ import RollHistory from './RollHistory.js';
 export default class Diceroll extends React.Component {
     constructor(props) {
         super(props);
-        this.handleHelpClick = this.handleHelpClick.bind(this);
-        this.handleReRollClick = this.handleReRollClick.bind(this);
-        this.handleRollClick = this.handleRollClick.bind(this);
         this.maxResults = 50;
         this.state = {
             formula: null,
@@ -47,21 +44,21 @@ export default class Diceroll extends React.Component {
         );
     }
 
-    handleHelpClick() {
+    handleHelpClick = () => {
         this.setState({showHelp: !this.state.showHelp});
-    }
-    handleRollClick(expression) {
+    };
+    handleRollClick = (expression) => {
         try {
             const result = Formula.calculate(expression || this.state.formula);
             this.addResult(result);
         } catch(ex) {
             this.setState({formulaError: ex});
         }
-    }
-    handleReRollClick(expression) {
+    };
+    handleReRollClick = (expression) => {
         this.setState({formula: expression});
         this.handleRollClick(expression);
-    }
+    };
 
     addResult(result) {
         let results = this.state.results;
