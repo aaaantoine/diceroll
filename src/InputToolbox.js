@@ -63,19 +63,10 @@ export default class InputToolbox extends React.Component {
                 </div>
                 <div class="col-lg-4 calculator-buttons">
                     <label>Calculator</label>
-                
-                    <div class="form-row">
-                        {this.formulaButtons([7,8,9,'/'])}
-                    </div>
-                    <div class="form-row">
-                        {this.formulaButtons([4,5,6,'*'])}
-                    </div>
-                    <div class="form-row">
-                        {this.formulaButtons([1,2,3,'-'])}
-                    </div>
-                    <div class="form-row">
-                        {this.formulaButtons(['(',0,')','+'])}
-                    </div>
+                    {this.formulaButtonRow([7,8,9,'/'])}
+                    {this.formulaButtonRow([4,5,6,'*'])}
+                    {this.formulaButtonRow([1,2,3,'-'])}
+                    {this.formulaButtonRow(['(',0,')','+'])}
                 </div>
             </div>
         );
@@ -87,8 +78,11 @@ export default class InputToolbox extends React.Component {
                 onClick={() => this.props.onFormulaAddRequest(value)}>{value}</button>
         </div>
     );
-    formulaButtons = (collection) => collection
-        .map(value => this.formulaButton(value));
+    formulaButtonRow = (collection) => (
+        <div class="form-row">
+            {collection.map(value => this.formulaButton(value))}
+        </div>
+    );
 
     enableHighLow = (dieCount) => dieCount > 1;
     adjustHighLowCount = (dieCount, highLow) =>
