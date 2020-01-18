@@ -61,7 +61,7 @@ export default class InputToolbox extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 calculator-buttons">
                     <label>Calculator</label>
                 
                     <div class="form-row">
