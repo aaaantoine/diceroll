@@ -44,10 +44,7 @@ export default class Diceroll extends React.Component {
         );
     }
 
-    handleHelpClick = () => {
-        this.setState({showHelp: !this.state.showHelp});
-    };
-    handleRollClick = (expression) => {
+    roll = (expression) => {
         try {
             const result = Formula.calculate(expression || this.state.formula);
             this.addResult(result);
@@ -55,9 +52,14 @@ export default class Diceroll extends React.Component {
             this.setState({formulaError: ex});
         }
     };
+
+    handleHelpClick = () => {
+        this.setState({showHelp: !this.state.showHelp});
+    };
+    handleRollClick = () => this.roll();
     handleReRollClick = (expression) => {
         this.setState({formula: expression});
-        this.handleRollClick(expression);
+        this.roll(expression);
     };
 
     addResult(result) {
