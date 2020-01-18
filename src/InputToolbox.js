@@ -12,53 +12,70 @@ export default class InputToolbox extends React.Component {
     }
     render() {
         return (
-            <div>
-                <div class="form-row">
-                    <div class="col">
-                        <label>Count</label>
-                        <div class="form-group">
-                            <input class="form-control" type="number" min="1" max="1000"
-                                value={this.state.dieCount}
-                                onChange={this.handleDieCountChange} /> 
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-row">
+                        <div class="col">
+                            <label>Count</label>
+                            <div class="form-group">
+                                <input class="form-control" type="number" min="1" max="1000"
+                                    value={this.state.dieCount}
+                                    onChange={this.handleDieCountChange} /> 
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>Sides</label>
+                            <div class="form-group">
+                                <input class="form-control" type="number" min="2" max="1000"
+                                    value={this.state.sidesPerDie}
+                                    onChange={this.handleSidesPerDieChange} />
+                            </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <label>Sides</label>
-                        <div class="form-group">
-                            <input class="form-control" type="number" min="2" max="1000"
-                                value={this.state.sidesPerDie}
-                                onChange={this.handleSidesPerDieChange} />
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label>Highest/Lowest</label>
-                        <div class="form-row">
-                            <div class="col">
-                                <select class="custom-select"
-                                    disabled={this.state.dieCount <= 1}
-                                    value={this.state.highLow}
-                                    onChange={this.handleHighLowChange}>
-                                    <option value=""></option>
-                                    <option value="h">Highest</option>
-                                    <option value="l">Lowest</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <input class="form-control" type="number" min="1"
-                                    disabled={!this.state.highLow}
-                                    max={this.state.dieCount-1}
-                                    value={this.state.highLowCount}
-                                    onChange={this.handleHighLowCountChange} />
-                            </div>
-                            <div class="col">
-                                <button class="btn btn-secondary" type="button"
-                                    onClick={this.handleDiceAddClick}>Add</button>
+                    <div class="form-row">
+                        <div class="col">
+                            <label>Keep</label>
+                            <div class="form-row">
+                                <div class="col">
+                                    <select class="custom-select"
+                                        disabled={this.state.dieCount <= 1}
+                                        value={this.state.highLow}
+                                        onChange={this.handleHighLowChange}>
+                                        <option value="">All</option>
+                                        <option value="h">Highest</option>
+                                        <option value="l">Lowest</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <input class="form-control" type="number" min="1"
+                                        disabled={!this.state.highLow}
+                                        max={this.state.dieCount-1}
+                                        value={this.state.highLowCount}
+                                        onChange={this.handleHighLowCountChange} />
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-secondary" type="button"
+                                        onClick={this.handleDiceAddClick}>Add</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    {this.formulaButtons(['+','-','*','/','(',')',0,1,2,3,4,5,6,7,8,9])}
+                <div class="col-lg-4">
+                    <label>Calculator</label>
+                
+                    <div class="form-row">
+                        {this.formulaButtons([7,8,9,'/'])}
+                    </div>
+                    <div class="form-row">
+                        {this.formulaButtons([4,5,6,'*'])}
+                    </div>
+                    <div class="form-row">
+                        {this.formulaButtons([1,2,3,'-'])}
+                    </div>
+                    <div class="form-row">
+                        {this.formulaButtons(['(',0,')','+'])}
+                    </div>
                 </div>
             </div>
         );
@@ -66,7 +83,7 @@ export default class InputToolbox extends React.Component {
 
     formulaButton = (value) => (
         <div class="col text-center">
-            <button class="btn btn-secondary" type="button"
+            <button class="btn btn-secondary btn-lg" type="button"
                 onClick={() => this.props.onFormulaAddRequest(value)}>{value}</button>
         </div>
     );
