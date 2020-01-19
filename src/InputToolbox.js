@@ -1,5 +1,7 @@
 import React from 'react';
 import RollSymbol from './RollSymbol.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus, faTimes, faDivide } from '@fortawesome/free-solid-svg-icons';
 
 export default class InputToolbox extends React.Component {
     constructor(props) {
@@ -27,7 +29,7 @@ export default class InputToolbox extends React.Component {
                                             data-toggle="dropdown"
                                             aria-haspopup="true"
                                             aria-expanded="false">
-                                            Common Dice
+                                            {this.rollSymbol(this.state.sidesPerDie || " ")} 
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="commonDiceDropdown">
                                             {this.sidesDropDownOption(2)}
@@ -80,7 +82,10 @@ export default class InputToolbox extends React.Component {
                                 </div>
                                 <div class="col text-right">
                                     <button class="btn btn-secondary" type="button"
-                                        onClick={this.handleDiceAddClick}>Add Dice</button>
+                                        title="Add dice to formula"
+                                        onClick={this.handleDiceAddClick}>
+                                            <FontAwesomeIcon icon={faPlus} />
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -97,16 +102,28 @@ export default class InputToolbox extends React.Component {
         );
     }
 
+    rollSymbol = (value) => <RollSymbol symbol={{sides: value, text: value}} />;
     sidesDropDownOption = (value) => (
         <button class="dropdown-item" type="button"
             onClick={() => this.handleSidesPerDieChange(value)}>
-            <RollSymbol symbol={{sides: value, text: value}} />
+            {this.rollSymbol(value)}
         </button>
     );
+    iconMap = {
+        "+": faPlus,
+        "-": faMinus,
+        "*": faTimes,
+        "/": faDivide
+    };
+    iconifyButton = (value) => this.iconMap[value]
+        ? <FontAwesomeIcon icon={this.iconMap[value]} />
+        : value;
     formulaButton = (value) => (
         <div class="col text-center">
             <button class="btn btn-secondary btn-lg" type="button"
-                onClick={() => this.props.onFormulaAddRequest(value)}>{value}</button>
+                onClick={() => this.props.onFormulaAddRequest(value)}>
+                    {this.iconifyButton(value)}
+            </button>
         </div>
     );
     formulaButtonRow = (collection) => (
@@ -114,6 +131,15 @@ export default class InputToolbox extends React.Component {
             {collection.map(value => this.formulaButton(value))}
         </div>
     );
+
+    getDiceFormula = () => {
+        const highLow = this.state.highLow 
+            ? this.implicit1(this.state.highLowCount) + this.state.highLow
+            : "";
+        const dice =
+            this.implicit1(this.state.dieCount) + "d" + this.state.sidesPerDie;
+        return highLow + dice;
+    };
 
     enableHighLow = (dieCount) => dieCount > 1;
     adjustHighLowCount = (dieCount, highLow) =>
@@ -142,13 +168,6 @@ export default class InputToolbox extends React.Component {
     });
     handleHighLowCountChange = (e) => this.setState({highLowCount: e.target.value});
     handleSidesPerDieChange = (value) => this.setState({sidesPerDie: value});
-    handleDiceAddClick = (e) => {
-        const highLow = this.state.highLow 
-            ? this.implicit1(this.state.highLowCount) + this.state.highLow
-            : "";
-        const dice =
-            this.implicit1(this.state.dieCount) + "d" + this.state.sidesPerDie;
-        const formula = highLow + dice;
-        this.props.onFormulaAddRequest(formula);
-    };
+    handleDiceAddClick = () =>
+        this.props.onFormulaAddRequest(this.getDiceFormula());
 }

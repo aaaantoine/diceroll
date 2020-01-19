@@ -1,5 +1,7 @@
 import React from 'react';
 import InputToolbox from './InputToolbox.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDice, faInfo, faTrashAlt, faWrench } from '@fortawesome/free-solid-svg-icons';
 
 export default class InputBar extends React.Component {
     constructor(props) {
@@ -25,10 +27,21 @@ export default class InputBar extends React.Component {
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <button type="button"
+                                title="Formula Building Tools"
                                 class={buttonClass(this.state.showTools)}
-                                onClick={() => this.setState({showTools: !this.state.showTools})}>Tools</button>
+                                onClick={() => this.setState({showTools: !this.state.showTools})}>
+                                    <FontAwesomeIcon icon={faWrench} />
+                            </button>
+                            <button class={buttonClass(this.props.helpIsVisible)} type="button"
+                                title="Formula Help"
+                                onClick={this.props.onHelpRequest}>
+                                    <FontAwesomeIcon icon={faInfo} />
+                            </button>
                             <button class="btn btn-outline-danger" type="button"
-                                onClick={(e) => this.props.onSetFormulaRequest("")}>Clear</button>
+                                title="Clear Formula"
+                                onClick={(e) => this.props.onSetFormulaRequest("")}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
                         </div>
                         <input type="text" class="form-control"
                             ref={this.formulaField}
@@ -36,10 +49,11 @@ export default class InputBar extends React.Component {
                             onChange={(e) => this.props.onSetFormulaRequest(e.target.value)}
                             value={this.props.formula} />
                         <div class="input-group-append">
-                            <button class={buttonClass(this.props.helpIsVisible)} type="button"
-                                onClick={this.props.onHelpRequest}>Help</button>
                             <button class="btn btn-primary" type="submit"
-                                onClick={this.props.onRollRequest}>Roll</button>
+                                title="Roll"
+                                onClick={this.props.onRollRequest}>
+                                    <FontAwesomeIcon icon={faDice} />
+                            </button>
                         </div>
                     </div>
                 </div>

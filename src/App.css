@@ -23,6 +23,20 @@
   line-height: 64px;
 }
 
+button.dropdown-toggle .symbol.die {
+  font-size: 0.75em;
+  line-height: 1.5em;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+button .symbol.die {
+  font-size: 1em;
+  line-height: 32px;
+  width: 32px;
+  height: 32px;
+}
+
 .symbol.discarded { opacity: 0.5; }
 
 .symbol.die {
