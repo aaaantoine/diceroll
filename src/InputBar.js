@@ -35,7 +35,7 @@ export default class InputBar extends React.Component {
             </div>
         );
         return (
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <div class="form-group">
                     <label for="rollFormula">Formula</label>
                     <div>
