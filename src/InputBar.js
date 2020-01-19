@@ -8,11 +8,6 @@ export default class InputBar extends React.Component {
     constructor(props) {
         super(props);
         this.dialogs = {
-            none: {
-                tooltip: null,
-                icon: null,
-                content: ""
-            },
             tools: {
                 tooltip: "Formula Building Tools",
                 icon: faWrench,
@@ -28,7 +23,7 @@ export default class InputBar extends React.Component {
         };
         this.formulaField = React.createRef();
         this.state = {
-            openDialog: this.dialogs.none
+            openDialog: null
         };
     }
     
@@ -77,13 +72,17 @@ export default class InputBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                {this.state.openDialog.content}
+                {Object.values(this.dialogs).map(dialog => (
+                    <div class={this.state.openDialog === dialog ? "" : "d-none"}>
+                        {dialog.content}
+                    </div>
+                ))}
             </div>
         );
     }
 
     setDialog = (value) => this.setState({
-        openDialog: this.state.openDialog === value ? this.dialogs.none : value
+        openDialog: this.state.openDialog === value ? null : value
     });
     handleFormulaAddRequest = (value) =>
         this.props.onSetFormulaRequest(
