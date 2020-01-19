@@ -15,7 +15,7 @@ export default class RollSymbol extends React.Component {
 
     getSymbolClass(sides, value) {
         function classBySides(sides) {
-            switch(sides) {
+            switch(parseInt(sides)) {
                 case 2: return "coin";
                 case 4: return "d4";
                 case 6: return "d6";
