@@ -7,7 +7,7 @@ export default class InputToolbox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dieCount: 1,
+            dieCount: null,
             sidesPerDie: 6,
             highLow: "",
             highLowCount: null
@@ -152,9 +152,9 @@ export default class InputToolbox extends React.Component {
     adjustHighLowCount = (dieCount, highLow) =>
         !highLow
             ? ""
-            : (this.state.highLowCount || 1) >= dieCount
+            : this.state.highLowCount >= dieCount
                 ? dieCount - 1
-                : this.state.highLowCount || 1;
+                : this.state.highLowCount;
     implicit1 = (value) => value > 1 ? value : "";
 
     handleDieCountChange = (e) => {
