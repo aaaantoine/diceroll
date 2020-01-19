@@ -48,8 +48,6 @@ export default class InputToolbox extends React.Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="col">
                             <label>Count</label>
                             <div class="form-group">
@@ -60,10 +58,10 @@ export default class InputToolbox extends React.Component {
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col">
+                        <div class="col-7">
                             <label>Keep</label>
-                            <div class="form-row">
-                                <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
                                     <select class="custom-select"
                                         disabled={this.state.dieCount <= 1}
                                         value={this.state.highLow}
@@ -73,13 +71,16 @@ export default class InputToolbox extends React.Component {
                                         <option value="l">Lowest</option>
                                     </select>
                                 </div>
-                                <div class="col">
-                                    <input class="form-control" type="number" min="1"
-                                        disabled={!this.state.highLow}
-                                        max={this.state.dieCount-1}
-                                        value={this.state.highLowCount}
-                                        onChange={this.handleHighLowCountChange} />
-                                </div>
+                                <input class="form-control" type="number" min="1"
+                                    disabled={!this.state.highLow}
+                                    max={this.state.dieCount-1}
+                                    value={this.state.highLowCount}
+                                    onChange={this.handleHighLowCountChange} />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>&nbsp;</label>
+                            <div class="form-row">
                                 <div class="col btn-group text-right">
                                     <button class="btn btn-secondary" type="button"
                                         title="Add dice to formula"
@@ -98,8 +99,7 @@ export default class InputToolbox extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 calculator-buttons">
-                    <label>Calculator</label>
+                <div class="col-lg-4 my-2 calculator-buttons">
                     {this.formulaButtonRow([7,8,9,'/'])}
                     {this.formulaButtonRow([4,5,6,'*'])}
                     {this.formulaButtonRow([1,2,3,'-'])}
