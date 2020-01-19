@@ -67,8 +67,8 @@ export default class InputToolbox extends React.Component {
                                         value={this.state.highLow}
                                         onChange={this.handleHighLowChange}>
                                         <option value="">All</option>
-                                        <option value="h">Highest</option>
-                                        <option value="l">Lowest</option>
+                                        <option value="h">High</option>
+                                        <option value="l">Low</option>
                                     </select>
                                 </div>
                                 <input class="form-control" type="number" min="1"
