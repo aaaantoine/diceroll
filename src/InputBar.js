@@ -51,7 +51,7 @@ export default class InputBar extends React.Component {
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"
                                 title="Roll"
-                                onClick={this.props.onRollRequest}>
+                                onClick={this.handleRollClick}>
                                     <FontAwesomeIcon icon={faDice} />
                             </button>
                         </div>
@@ -60,7 +60,8 @@ export default class InputBar extends React.Component {
                 {
                     this.state.showTools
                         ? <InputToolbox
-                            onFormulaAddRequest={this.handleFormulaAddRequest} />
+                            onFormulaAddRequest={this.handleFormulaAddRequest}
+                            onRollRequest={this.handleRollRequest} />
                         : ""
                 }
             </div>
@@ -70,7 +71,9 @@ export default class InputBar extends React.Component {
     handleFormulaAddRequest = (value) =>
         this.props.onSetFormulaRequest(
             this.formulaField.current.value + value);
-
+    handleRollRequest = (value) =>
+        this.props.onRollRequest(value);
+    handleRollClick = () => this.handleRollRequest();
     handleFormulaKeyUp = (event) => {
         if (event.keyCode === 13) {
             this.props.onRollRequest();

@@ -1,7 +1,7 @@
 import React from 'react';
 import RollSymbol from './RollSymbol.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus, faTimes, faDivide } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus, faTimes, faDivide, faDice } from '@fortawesome/free-solid-svg-icons';
 
 export default class InputToolbox extends React.Component {
     constructor(props) {
@@ -80,11 +80,18 @@ export default class InputToolbox extends React.Component {
                                         value={this.state.highLowCount}
                                         onChange={this.handleHighLowCountChange} />
                                 </div>
-                                <div class="col text-right">
+                                <div class="col btn-group text-right">
                                     <button class="btn btn-secondary" type="button"
                                         title="Add dice to formula"
+                                        disabled={!this.state.sidesPerDie}
                                         onClick={this.handleDiceAddClick}>
                                             <FontAwesomeIcon icon={faPlus} />
+                                    </button>
+                                    <button class="btn btn-outline-primary" type="button"
+                                        title="Set dice as formula and roll now"
+                                        disabled={!this.state.sidesPerDie}
+                                        onClick={this.handleRollClick}>
+                                            <FontAwesomeIcon icon={faDice} />
                                     </button>
                                 </div>
                             </div>
@@ -170,4 +177,6 @@ export default class InputToolbox extends React.Component {
     handleSidesPerDieChange = (value) => this.setState({sidesPerDie: value});
     handleDiceAddClick = () =>
         this.props.onFormulaAddRequest(this.getDiceFormula());
+    handleRollClick = () =>
+        this.props.onRollRequest(this.getDiceFormula());
 }
