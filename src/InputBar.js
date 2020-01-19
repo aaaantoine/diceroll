@@ -14,8 +14,28 @@ export default class InputBar extends React.Component {
     render() {
         const buttonClass = isActive =>
             "btn btn-outline-secondary" + (isActive ? " active" : "");
+        const buttonTray = divClass => (
+            <div class={divClass}>
+                <button type="button"
+                    title="Formula Building Tools"
+                    class={buttonClass(this.state.showTools)}
+                    onClick={() => this.setState({showTools: !this.state.showTools})}>
+                        <FontAwesomeIcon icon={faWrench} />
+                </button>
+                <button class={buttonClass(this.props.helpIsVisible)} type="button"
+                    title="Formula Help"
+                    onClick={this.props.onHelpRequest}>
+                        <FontAwesomeIcon icon={faInfo} />
+                </button>
+                <button class="btn btn-outline-danger" type="button"
+                    title="Clear Formula"
+                    onClick={(e) => this.props.onSetFormulaRequest("")}>
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+            </div>
+        );
         return (
-            <div>
+            <div class="form-group">
                 {
                     this.state.showTools
                         ? <InputToolbox
@@ -24,25 +44,11 @@ export default class InputBar extends React.Component {
                 }
                 <div class="form-group">
                     <label for="rollFormula">Formula</label>
+                    <div>
+                        {buttonTray("form-group btn-group d-sm-none")}
+                    </div>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button type="button"
-                                title="Formula Building Tools"
-                                class={buttonClass(this.state.showTools)}
-                                onClick={() => this.setState({showTools: !this.state.showTools})}>
-                                    <FontAwesomeIcon icon={faWrench} />
-                            </button>
-                            <button class={buttonClass(this.props.helpIsVisible)} type="button"
-                                title="Formula Help"
-                                onClick={this.props.onHelpRequest}>
-                                    <FontAwesomeIcon icon={faInfo} />
-                            </button>
-                            <button class="btn btn-outline-danger" type="button"
-                                title="Clear Formula"
-                                onClick={(e) => this.props.onSetFormulaRequest("")}>
-                                    <FontAwesomeIcon icon={faTrashAlt} />
-                            </button>
-                        </div>
+                        {buttonTray("input-group-prepend d-none d-sm-inline-block")}
                         <input type="text" class="form-control"
                             ref={this.formulaField}
                             onKeyUp={this.handleFormulaKeyUp}
