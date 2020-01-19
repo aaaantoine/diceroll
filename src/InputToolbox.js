@@ -1,7 +1,8 @@
 import React from 'react';
+import CalcKeys from './CalcKeys.js';
 import RollSymbol from './RollSymbol.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus, faTimes, faDivide, faDice } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faDice } from '@fortawesome/free-solid-svg-icons';
 
 export default class InputToolbox extends React.Component {
     constructor(props) {
@@ -99,11 +100,8 @@ export default class InputToolbox extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 my-2 calculator-buttons">
-                    {this.formulaButtonRow([7,8,9,'/'])}
-                    {this.formulaButtonRow([4,5,6,'*'])}
-                    {this.formulaButtonRow([1,2,3,'-'])}
-                    {this.formulaButtonRow(['(',0,')','+'])}
+                <div class="col-lg-4">
+                    <CalcKeys onInput={this.props.onFormulaAddRequest} />
                 </div>
             </div>
         );
@@ -115,28 +113,6 @@ export default class InputToolbox extends React.Component {
             onClick={() => this.handleSidesPerDieChange(value)}>
             {this.rollSymbol(value)}
         </button>
-    );
-    iconMap = {
-        "+": faPlus,
-        "-": faMinus,
-        "*": faTimes,
-        "/": faDivide
-    };
-    iconifyButton = (value) => this.iconMap[value]
-        ? <FontAwesomeIcon icon={this.iconMap[value]} />
-        : value;
-    formulaButton = (value) => (
-        <div class="col text-center">
-            <button class="btn btn-secondary btn-lg" type="button"
-                onClick={() => this.props.onFormulaAddRequest(value)}>
-                    {this.iconifyButton(value)}
-            </button>
-        </div>
-    );
-    formulaButtonRow = (collection) => (
-        <div class="form-row">
-            {collection.map(value => this.formulaButton(value))}
-        </div>
     );
 
     getDiceFormula = () => {
