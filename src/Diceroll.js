@@ -1,6 +1,5 @@
 import React from 'react';
 import Formula from './Formula.js';
-import Help from './Help.js';
 import InputBar from './InputBar.js';
 import RollHistory from './RollHistory.js';
 
@@ -11,8 +10,7 @@ export default class Diceroll extends React.Component {
         this.state = {
             formula: null,
             formulaError: null,
-            results: [],
-            showHelp: false
+            results: []
         };
     }
 
@@ -24,19 +22,13 @@ export default class Diceroll extends React.Component {
                 </div>
             )
             : "";
-        const helpSection = this.state.showHelp
-            ? <Help onCloseRequest={this.handleHelpClick} />
-            : "";
         return (
             <div class="container">
                 <InputBar
                     formula={this.state.formula}
-                    helpIsVisible={this.state.showHelp}
                     onSetFormulaRequest={value => this.setState({formula: value})}
-                    onRollRequest={this.handleRollRequest}
-                    onHelpRequest={this.handleHelpClick} />
+                    onRollRequest={this.handleRollRequest} />
                 {error}
-                {helpSection}
                 <RollHistory
                     rolls={this.state.results}
                     onReRollRequest={this.handleRollRequest} />
@@ -53,9 +45,6 @@ export default class Diceroll extends React.Component {
         }
     };
 
-    handleHelpClick = () => {
-        this.setState({showHelp: !this.state.showHelp});
-    };
     handleRollRequest = (value) => {
         const formula = value !== undefined ? value : this.state.formula;
         this.setState({formula});

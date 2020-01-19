@@ -1,4 +1,5 @@
 import React from 'react';
+import Help from './Help.js';
 import InputToolbox from './InputToolbox.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDice, faInfo, faTrashAlt, faWrench } from '@fortawesome/free-solid-svg-icons';
@@ -6,27 +7,46 @@ import { faDice, faInfo, faTrashAlt, faWrench } from '@fortawesome/free-solid-sv
 export default class InputBar extends React.Component {
     constructor(props) {
         super(props);
+        this.dialogs = {
+            none: {
+                tooltip: null,
+                icon: null,
+                content: ""
+            },
+            tools: {
+                tooltip: "Formula Building Tools",
+                icon: faWrench,
+                content: <InputToolbox
+                    onFormulaAddRequest={this.handleFormulaAddRequest}
+                    onRollRequest={this.handleRollRequest} />
+            },
+            help: {
+                tooltip: "Formula Help",
+                icon: faInfo,
+                content: <Help onCloseRequest={this.handleHelpClick} />
+            }
+        };
         this.formulaField = React.createRef();
         this.state = {
-            showTools: false
+            openDialog: this.dialogs.none
         };
     }
+    
     render() {
         const buttonClass = isActive =>
             "btn btn-outline-secondary" + (isActive ? " active" : "");
+        const dialogButton = dialog => (
+            <button type="button"
+                    title={dialog.tooltip}
+                    class={buttonClass(this.state.openDialog === dialog)}
+                    onClick={() => this.setDialog(dialog)}>
+                        <FontAwesomeIcon icon={dialog.icon} />
+                </button>
+        );
         const buttonTray = divClass => (
             <div class={divClass}>
-                <button type="button"
-                    title="Formula Building Tools"
-                    class={buttonClass(this.state.showTools)}
-                    onClick={() => this.setState({showTools: !this.state.showTools})}>
-                        <FontAwesomeIcon icon={faWrench} />
-                </button>
-                <button class={buttonClass(this.props.helpIsVisible)} type="button"
-                    title="Formula Help"
-                    onClick={this.props.onHelpRequest}>
-                        <FontAwesomeIcon icon={faInfo} />
-                </button>
+                {dialogButton(this.dialogs.tools)}
+                {dialogButton(this.dialogs.help)}
                 <button class="btn btn-outline-danger" type="button"
                     title="Clear Formula"
                     onClick={(e) => this.props.onSetFormulaRequest("")}>
@@ -57,20 +77,18 @@ export default class InputBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                {
-                    this.state.showTools
-                        ? <InputToolbox
-                            onFormulaAddRequest={this.handleFormulaAddRequest}
-                            onRollRequest={this.handleRollRequest} />
-                        : ""
-                }
+                {this.state.openDialog.content}
             </div>
         );
     }
 
+    setDialog = (value) => this.setState({
+        openDialog: this.state.openDialog === value ? this.dialogs.none : value
+    });
     handleFormulaAddRequest = (value) =>
         this.props.onSetFormulaRequest(
             this.formulaField.current.value + value);
+    handleHelpClick = () => this.setDialog(this.dialogs.help);
     handleRollRequest = (value) =>
         this.props.onRollRequest(value);
     handleRollClick = () => this.handleRollRequest();
