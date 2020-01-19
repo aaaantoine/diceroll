@@ -36,12 +36,6 @@ export default class InputBar extends React.Component {
         );
         return (
             <div class="form-group">
-                {
-                    this.state.showTools
-                        ? <InputToolbox
-                            onFormulaAddRequest={this.handleFormulaAddRequest} />
-                        : ""
-                }
                 <div class="form-group">
                     <label for="rollFormula">Formula</label>
                     <div>
@@ -63,6 +57,12 @@ export default class InputBar extends React.Component {
                         </div>
                     </div>
                 </div>
+                {
+                    this.state.showTools
+                        ? <InputToolbox
+                            onFormulaAddRequest={this.handleFormulaAddRequest} />
+                        : ""
+                }
             </div>
         );
     }
