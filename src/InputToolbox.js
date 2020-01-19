@@ -1,6 +1,6 @@
 import React from 'react';
 import CalcKeys from './CalcKeys.js';
-import RollSymbol from './RollSymbol.js';
+import DieDropDown from './DieDropDown.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faDice } from '@fortawesome/free-solid-svg-icons';
 
@@ -24,24 +24,9 @@ export default class InputToolbox extends React.Component {
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary dropdown-toggle"
-                                            type="button"
-                                            id="commonDiceDropdown"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                            {this.rollSymbol(this.state.sidesPerDie || " ")} 
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="commonDiceDropdown">
-                                            {this.sidesDropDownOption(2)}
-                                            {this.sidesDropDownOption(4)}
-                                            {this.sidesDropDownOption(6)}
-                                            {this.sidesDropDownOption(8)}
-                                            {this.sidesDropDownOption(10)}
-                                            {this.sidesDropDownOption(12)}
-                                            {this.sidesDropDownOption(20)}
-                                            {this.sidesDropDownOption(100)}
-                                        </div>
+                                        <DieDropDown
+                                            value={this.state.sidesPerDie}
+                                            onChange={this.handleSidesPerDieChange} />
                                     </div>
                                     <input class="form-control" type="number" min="2" max="1000"
                                         value={this.state.sidesPerDie}
@@ -106,14 +91,6 @@ export default class InputToolbox extends React.Component {
             </div>
         );
     }
-
-    rollSymbol = (value) => <RollSymbol symbol={{sides: value, text: value}} />;
-    sidesDropDownOption = (value) => (
-        <button class="dropdown-item" type="button"
-            onClick={() => this.handleSidesPerDieChange(value)}>
-            {this.rollSymbol(value)}
-        </button>
-    );
 
     getDiceFormula = () => {
         const highLow = this.state.highLow 
