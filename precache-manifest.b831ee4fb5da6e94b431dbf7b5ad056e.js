@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a2c0529b80f6fb04e2590f38e246cd34",
+    "revision": "dae4690ff70d75496647a776ecc83dff",
     "url": "/diceroll/index.html"
   },
   {
-    "revision": "1c4dd43b8afcdc9869d9",
-    "url": "/diceroll/static/css/main.e27c2526.chunk.css"
+    "revision": "91d3dc59f3e1aa2e45ee",
+    "url": "/diceroll/static/css/main.01c1b226.chunk.css"
   },
   {
-    "revision": "3b677adaf7ea4b962404",
-    "url": "/diceroll/static/js/2.b7a1a2f1.chunk.js"
+    "revision": "4a96fd5f7945dc95e58c",
+    "url": "/diceroll/static/js/2.ea5b4c53.chunk.js"
   },
   {
     "revision": "d705cb622423d72c5defbf368ca70dcc",
-    "url": "/diceroll/static/js/2.b7a1a2f1.chunk.js.LICENSE"
+    "url": "/diceroll/static/js/2.ea5b4c53.chunk.js.LICENSE"
   },
   {
-    "revision": "1c4dd43b8afcdc9869d9",
-    "url": "/diceroll/static/js/main.023b000f.chunk.js"
+    "revision": "91d3dc59f3e1aa2e45ee",
+    "url": "/diceroll/static/js/main.e2e01e11.chunk.js"
   },
   {
     "revision": "b048d93ac89478760bd3",
