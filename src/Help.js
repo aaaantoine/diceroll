@@ -55,6 +55,16 @@ export default class Help extends React.Component {
                         <li><code>1l2d20+3</code>: Rolls 2 20-sided dice, only counts the lowest, and adds 3.</li>
                     </ul>
                 </p>
+                <p>
+                    Fudge dice:
+                    <ul>
+                        <li>
+                            <code>5df</code>: Rolls 5 fudge dice,
+                            each producing a value of -1, 0, or +1.
+                            Result will be between -5 and 5.
+                        </li>
+                    </ul>
+                </p>
                 <div class="container-fluid">
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-info" type="button"

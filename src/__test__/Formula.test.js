@@ -77,6 +77,24 @@ test('throws exception when calculating (d4)d6', () => {
     expect(() => Formula.calculate("(d4)d6")).toThrow(new Error('At position 4: Calculating number of dice in a pool is not supported.'));
 });
 
+// fudge dice
+test('calculates 1df with random values [.0] and returns total of -1', () =>
+    testTotal("1df", -1, [.0]));
+test('calculates 1df with random values [.34] and returns total of 0', () =>
+    testTotal("1df", 0, [.34]));
+test('calculates 1df with random values [.67] and returns total of 1', () =>
+    testTotal("1df", 1, [.67]));
+test('calculates df+3 with random values [.0] and returns total of 2', () =>
+    testTotal("df+3", 2, [.0]));
+test('calculates df(5) with random values [.0] and returns total of -5', () =>
+    testTotal("df(5)", -5, [.0]));
+test('throws exception when calculating "3f"', () => {
+    expect(() => Formula.calculate("3f")).toThrow(new Error('At position 1: Invalid placement of character "f".'));
+});
+test('throws exception when calculating "1df3"', () => {
+    expect(() => Formula.calculate("1df3")).toThrow(new Error('At position 3: Invalid number placement.'));
+});
+
 // compound
 test('calculates 2*(2d10-4) with random values [.8, .9] and returns total of 30', () =>
     testTotal("2*(2d10-4)", 30, [.8, .9]));

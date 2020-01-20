@@ -3,6 +3,7 @@ const MINUS = '-';
 const TIMES = '*';
 const DIV = '/';
 const ROLL = 'd';
+const FUDGE = 'f';
 const LOWEST = 'l';
 const HIGHEST = 'h';
 
@@ -20,7 +21,7 @@ class Symbol {
     getNumber() {
         return this.type !== NUMBER || !!this.discard
             ? 0 
-            : parseFloat(this.text);
+            : this.text === FUDGE ? FUDGE : parseFloat(this.text);
     }
 }
 
@@ -54,7 +55,7 @@ function parseSymbols(expression, startPosition) {
             character === HIGHEST;
     }
     function isNumberPart(character) {
-        return character >= '0' && character <= '9';
+        return (character >= '0' && character <= '9') || character === FUDGE;
     }
     function isValidBeforeOperator(character) {
         return character === ")" || isNumberPart(character);
@@ -119,8 +120,11 @@ function parseSymbols(expression, startPosition) {
             }
             symbols.push(new Symbol(OPERATOR, expression[i]));
         }
-        else if (isNumberPart(expression[i])) {
-            if (!lastSymbol || lastSymbol.type !== NUMBER) {
+        else if (isNumberPart(expression[i]) && expression[i] !== FUDGE) {
+            if (lastChar === FUDGE) {
+                throw parserError(i, "Invalid number placement.");
+            }
+            else if (!lastSymbol || lastSymbol.type !== NUMBER) {
                 symbols.push(new Symbol(NUMBER, expression[i]));
             }
             else if (lastSymbol && expression[i-1] === ' ') {
@@ -128,6 +132,13 @@ function parseSymbols(expression, startPosition) {
             }
             else {
                 lastSymbol.text += expression[i];
+            }
+        }
+        else if (expression[i] === FUDGE) {
+            if (lastChar === ROLL) {
+                symbols.push(new Symbol(NUMBER, expression[i]));
+            } else {
+                throw parserError(i, `Invalid placement of character "${expression[i]}".`);
             }
         }
         else if (expression[i] === '(')
@@ -167,8 +178,9 @@ function parseSymbols(expression, startPosition) {
 }
 
 function rollOne(sides, randomizer) {
+    const [actualSides, baseline] = sides === FUDGE ? [3, -1] : [sides, 1];
     const r = randomizer || Math.random;
-    return Math.floor(r() * (sides)) + 1;
+    return Math.floor(r() * actualSides) + baseline;
 }
 
 function rollIntoSymbols(count, sides, randomizer) {
