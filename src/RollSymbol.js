@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
-const renderSymbol = symbol => symbol.sides === 100
+const renderSymbol = symbol => String(symbol.sides) === "100"
     ? d100(symbol)
     : singleDie(symbol);
 
