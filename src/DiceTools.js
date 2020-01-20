@@ -5,6 +5,7 @@ import { faPlus, faDice } from '@fortawesome/free-solid-svg-icons';
 
 const implicit1 = value => value > 1 ? value : "";
 const enableHighLow = dieCount => dieCount > 1;
+const fudge = "f";
 
 export default class DiceTools extends React.Component {
     constructor(props) {
@@ -12,6 +13,7 @@ export default class DiceTools extends React.Component {
         this.state = {
             dieCount: null,
             sidesPerDie: 6,
+            isFudged: false,
             highLow: "",
             highLowCount: null
         };
@@ -22,14 +24,22 @@ export default class DiceTools extends React.Component {
             <div class="form-row">
                 <div class="col">
                     <label>Sides</label>
+                    <div class="float-right text-muted">
+                        {
+                            this.state.isFudged ? "Fudge Die"
+                            : this.state.sidesPerDie.toString() === "2" ? "Coin"
+                            : "D" + this.state.sidesPerDie
+                        }
+                    </div>
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <DieDropDown
-                                    value={this.state.sidesPerDie}
+                                    value={this.state.isFudged ? fudge : this.state.sidesPerDie}
                                     onChange={this.handleSidesPerDieChange} />
                             </div>
-                            <input class="form-control" type="number" min="2" max="1000"
+                            <input type="number" min="2" max="1000"
+                                class={"form-control" + (this.state.isFudged ? " text-warning" : "")} 
                                 value={this.state.sidesPerDie}
                                 onChange={(e) => this.handleSidesPerDieChange(e.target.value)} />
                         </div>
@@ -92,8 +102,9 @@ export default class DiceTools extends React.Component {
         const highLow = this.state.highLow 
             ? implicit1(this.state.highLowCount) + this.state.highLow
             : "";
+        const sides = this.state.isFudged ? fudge : this.state.sidesPerDie;
         const dice =
-            implicit1(this.state.dieCount) + "d" + this.state.sidesPerDie;
+            implicit1(this.state.dieCount) + "d" + sides;
         return highLow + dice;
     };
 
@@ -121,7 +132,10 @@ export default class DiceTools extends React.Component {
             e.target.value)
     });
     handleHighLowCountChange = (e) => this.setState({highLowCount: e.target.value});
-    handleSidesPerDieChange = (value) => this.setState({sidesPerDie: value});
+    handleSidesPerDieChange = (value) => this.setState({
+        sidesPerDie: value === fudge ? 3 : value,
+        isFudged: value === fudge
+    });
     handleDiceAddClick = () =>
         this.props.onDiceAddClick(this.getDiceFormula());
     handleRollClick = () =>
