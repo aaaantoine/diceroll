@@ -24,13 +24,12 @@ export default class DiceTools extends React.Component {
             <div class="form-row">
                 <div class="col">
                     <label>Sides</label>
-                    <div class="form-check float-right">
-                        <input class="form-check-input" type="checkbox" id="fudgeCheckbox"
-                            checked={this.state.isFudged}
-                            onClick={this.handleFudgeClick} />
-                        <label class="form-check-label" for="fudgeCheckbox">
-                            Fudge
-                        </label>
+                    <div class="float-right text-muted">
+                        {
+                            this.state.isFudged ? "Fudge Die"
+                            : this.state.sidesPerDie.toString() === "2" ? "Coin"
+                            : "D" + this.state.sidesPerDie
+                        }
                     </div>
                     <div class="form-group">
                         <div class="input-group">
@@ -39,7 +38,8 @@ export default class DiceTools extends React.Component {
                                     value={this.state.isFudged ? fudge : this.state.sidesPerDie}
                                     onChange={this.handleSidesPerDieChange} />
                             </div>
-                            <input class="form-control" type="number" min="2" max="1000"
+                            <input type="number" min="2" max="1000"
+                                class={"form-control" + (this.state.isFudged ? " text-warning" : "")} 
                                 value={this.state.sidesPerDie}
                                 onChange={(e) => this.handleSidesPerDieChange(e.target.value)} />
                         </div>
@@ -131,7 +131,6 @@ export default class DiceTools extends React.Component {
             this.state.dieCount,
             e.target.value)
     });
-    handleFudgeClick = () => this.setState({isFudged: !this.state.isFudged});
     handleHighLowCountChange = (e) => this.setState({highLowCount: e.target.value});
     handleSidesPerDieChange = (value) => this.setState({
         sidesPerDie: value === fudge ? this.state.sidesPerDie : value,
