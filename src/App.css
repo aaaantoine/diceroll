@@ -57,7 +57,8 @@ button .symbol.die {
 .symbol.d8,
 .symbol.d10,
 .symbol.d12,
-.symbol.d20 { color: white; }
+.symbol.d20,
+.symbol.df { color: white; }
 
 /* Larger numbers mean more, smaller sides, need smaller digits */
 .symbol.d10,
@@ -83,6 +84,8 @@ button .symbol.die {
 .symbol.d10 { background-image: url("image/d10.svg"); }
 .symbol.d12 { background-image: url("image/d12.svg"); }
 .symbol.d20 { background-image: url("image/d20.svg"); }
+
+.symbol.df { background-image: url("image/d6.svg"); }
 
 .history .row {
   border-bottom: 1px solid #888888;

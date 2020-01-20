@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const renderSymbol = symbol => symbol.sides === 100
     ? d100(symbol)
@@ -22,8 +24,17 @@ const singleDie = symbol => {
     const symbolClass = getSymbolClass(symbol.sides, symbol.text);
     const dieClass = symbol.sides ? " die " + symbolClass : "";
     const fullSymbolClass = "symbol" + discarded + dieClass;
-    return <span class={fullSymbolClass}>{symbol.text}</span>;
+    return <span class={fullSymbolClass}>{getMarking(symbol)}</span>;
 };
+
+const getMarking = symbol => symbol.sides === 'f'
+    ? getFudgeText(symbol.text)
+    : symbol.text;
+
+const getFudgeText = value =>
+    value < 0 ? <FontAwesomeIcon icon={faMinus} />
+    : value > 0 ? <FontAwesomeIcon icon={faPlus} />
+    : <React.Fragment>&nbsp;</React.Fragment>;
 
 const getSymbolClass = (sides, value) => {
     const prefix = classBySides(sides);
@@ -31,14 +42,15 @@ const getSymbolClass = (sides, value) => {
 };
 
 const classBySides = (sides) => {
-    switch(parseInt(sides)) {
-        case 2: return "coin";
-        case 4: return "d4";
-        case 6: return "d6";
-        case 8: return "d8";
-        case 10: return "d10";
-        case 12: return "d12";
-        case 20: return "d20";
+    switch(String(sides)) {
+        case "2": return "coin";
+        case "4": return "d4";
+        case "6": return "d6";
+        case "8": return "d8";
+        case "10": return "d10";
+        case "12": return "d12";
+        case "20": return "d20";
+        case "f": return "df";
         default:
             return null;
     }
