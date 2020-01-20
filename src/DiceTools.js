@@ -133,7 +133,7 @@ export default class DiceTools extends React.Component {
     });
     handleHighLowCountChange = (e) => this.setState({highLowCount: e.target.value});
     handleSidesPerDieChange = (value) => this.setState({
-        sidesPerDie: value === fudge ? this.state.sidesPerDie : value,
+        sidesPerDie: value === fudge ? 3 : value,
         isFudged: value === fudge
     });
     handleDiceAddClick = () =>
