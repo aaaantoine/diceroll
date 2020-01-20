@@ -4,6 +4,8 @@ import InputToolbox from './InputToolbox.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDice, faInfo, faTrashAlt, faWrench } from '@fortawesome/free-solid-svg-icons';
 
+const formulaIsRollable = formula => formula && formula.trim() !== "";
+
 export default class InputBar extends React.Component {
     constructor(props) {
         super(props);
@@ -66,6 +68,7 @@ export default class InputBar extends React.Component {
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit"
                                 title="Roll"
+                                disabled={!formulaIsRollable(this.props.formula)}
                                 onClick={this.handleRollClick}>
                                     <FontAwesomeIcon icon={faDice} />
                             </button>
@@ -92,7 +95,7 @@ export default class InputBar extends React.Component {
         this.props.onRollRequest(value);
     handleRollClick = () => this.handleRollRequest();
     handleFormulaKeyUp = (event) => {
-        if (event.keyCode === 13) {
+        if (event.keyCode === 13 && formulaIsRollable(this.props.formula)) {
             this.props.onRollRequest();
         }
     };
