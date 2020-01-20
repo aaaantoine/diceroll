@@ -1,8 +1,8 @@
 import React from 'react';
 import RollSymbol from './RollSymbol.js';
 
-const rollSymbol = (value) =>
-    <RollSymbol symbol={{sides: value, text: value}} />;
+const rollSymbol = value =>
+    <RollSymbol symbol={{sides: value, text: value === "f" ? 1 : value }} />;
 
 export default class DieDropDown extends React.Component {
     render = () => (
@@ -24,11 +24,12 @@ export default class DieDropDown extends React.Component {
                 {this.sidesDropDownOption(12)}
                 {this.sidesDropDownOption(20)}
                 {this.sidesDropDownOption(100)}
+                {this.sidesDropDownOption("f")}
             </div>
         </React.Fragment>
     );
 
-    sidesDropDownOption = (value) => (
+    sidesDropDownOption = value => (
         <button class="dropdown-item" type="button"
             onClick={() => this.props.onChange(value)}>
             {rollSymbol(value)}
