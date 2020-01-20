@@ -37,6 +37,13 @@ button .symbol.die {
   height: 32px;
 }
 
+.die-dropdown .dropdown-item
+{
+  width: inherit;
+  display: inline-block;
+  padding: .25rem;
+}
+
 .symbol.discarded { opacity: 0.5; }
 
 .symbol.die {

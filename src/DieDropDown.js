@@ -15,7 +15,7 @@ export default class DieDropDown extends React.Component {
                 aria-expanded="false">
                 {rollSymbol(this.props.value || " ")} 
             </button>
-            <div class="dropdown-menu" aria-labelledby="commonDiceDropdown">
+            <div class="dropdown-menu die-dropdown" aria-labelledby="commonDiceDropdown">
                 {this.sidesDropDownOption(2)}
                 {this.sidesDropDownOption(4)}
                 {this.sidesDropDownOption(6)}
@@ -30,7 +30,7 @@ export default class DieDropDown extends React.Component {
     );
 
     sidesDropDownOption = value => (
-        <button class="dropdown-item" type="button"
+        <button class="dropdown-item px-1" type="button"
             onClick={() => this.props.onChange(value)}>
             {rollSymbol(value)}
         </button>
