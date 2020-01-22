@@ -76,11 +76,11 @@ export default class InputBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                {Object.values(this.dialogs).map(dialog => (
-                    <div class={this.state.openDialog === dialog ? "" : "d-none"}>
+                {Object.values(this.dialogs).map(dialog => this.state.openDialog === dialog ? (
+                    <div>
                         {dialog.content}
                     </div>
-                ))}
+                ) : null)}
             </div>
         );
     }
