@@ -8,10 +8,10 @@ test("should perform a basic dice calculation", async () => {
   const formulaInput = getByLabelText(/formula/i);
   const submitButton = getByText(/submit/i);
 
-  await userEvent.type(formulaInput, "d2+4");
+  await userEvent.type(formulaInput, "1d1+4");
   userEvent.click(submitButton);
 
   // Results of submitting the form
   getByText(/re-roll/i);
-  getByText(/6/i);
+  getByText(/5/i);
 });
