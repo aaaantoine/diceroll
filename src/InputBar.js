@@ -61,6 +61,7 @@ export default class InputBar extends React.Component {
                     <div class="input-group">
                         {buttonTray("input-group-prepend d-none d-sm-inline-block")}
                         <input type="text" class="form-control"
+                        id="rollFormula"
                             ref={this.formulaField}
                             onKeyUp={this.handleFormulaKeyUp}
                             onChange={(e) => this.props.onSetFormulaRequest(e.target.value)}
@@ -69,7 +70,7 @@ export default class InputBar extends React.Component {
                             <button class="btn btn-primary" type="submit"
                                 title="Roll"
                                 disabled={!formulaIsRollable(this.props.formula)}
-                                onClick={this.handleRollClick}>
+                                onClick={this.handleRollClick}><span className="sr-only">Submit</span>
                                     <FontAwesomeIcon icon={faDice} />
                             </button>
                         </div>
