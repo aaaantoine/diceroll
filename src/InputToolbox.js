@@ -36,11 +36,11 @@ export default class InputToolbox extends React.Component {
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    {Object.values(this.dialogs).map(dialog => (
-                        <div class={"col-lg-4" + (this.state.openDialog === dialog ? "" : " d-none d-lg-block")}>
+                    {Object.values(this.dialogs).map(dialog => this.state.openDialog === dialog ? (
+                        <div class="col-lg-4 d-lg-block">
                             {dialog.content}
                         </div>
-                    ))}
+                    ) : null)}
                 </div>
             </React.Fragment>
         );
