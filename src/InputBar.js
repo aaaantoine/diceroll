@@ -70,7 +70,7 @@ export default class InputBar extends React.Component {
                             <button class="btn btn-primary" type="submit"
                                 title="Roll"
                                 disabled={!formulaIsRollable(this.props.formula)}
-                                onClick={this.handleRollClick}><span className="sr-only">Submit</span>
+                                onClick={this.handleRollClick}><span className="sr-only">Roll</span>
                                     <FontAwesomeIcon icon={faDice} />
                             </button>
                         </div>

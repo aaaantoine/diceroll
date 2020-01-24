@@ -6,10 +6,10 @@ import userEvent from "@testing-library/user-event";
 test("should perform a basic dice calculation", async () => {
   const { getByText, getByLabelText } = render(<App />);
   const formulaInput = getByLabelText(/formula/i);
-  const submitButton = getByText(/submit/i);
+  const rollButton = getByText(/roll/i);
 
   await userEvent.type(formulaInput, "1d1+4");
-  userEvent.click(submitButton);
+  userEvent.click(rollButton);
 
   // Results of submitting the form
   getByText(/re-roll/i);
